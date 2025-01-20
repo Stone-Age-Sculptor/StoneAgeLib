@@ -1,3 +1,8 @@
 StoneLib
 
-All sorts of scripts for OpenSCAD for 3D models.
+All sorts of scripts for OpenSCAD.
+The scripts are for 3D models for 3D printing.
+
+An important aspect of this library is the CC0 (Public Domain) license.
+
+Note: When using files from this library for a project that is published, then please add those library files to your project. This library might change and a future version might be incompatible with your script.
