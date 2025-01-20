@@ -1,4 +1,4 @@
-StoneLib
+StoneAgeLib
 
 All sorts of scripts for OpenSCAD.
 The scripts are for 3D models for 3D printing.
