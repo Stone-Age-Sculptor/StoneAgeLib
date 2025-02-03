@@ -9,6 +9,10 @@ Note: When using files from this library for a project that is published, then p
 
 This library is for a OpenSCAD version of at least 2025 with the features turned on and using "Manifold".
 
+## Documenation
+
+Explanation about the library functions are in the [Wiki](https://github.com/Stone-Age-Sculptor/StoneAgeLib/wiki).
+
 ## Examples
 
 This library has a "Subdivision Font". It is created with control points and the path is made with subdivision.
