@@ -6,7 +6,14 @@
 // February 3, 2025
 // By: Stone Age Sculptor
 // License: CC0 (Public Domain)
-// The "pillow()" function is by Reddit user oldesole1, license CC0.
+//
+// Version 2
+// February 4, 2025
+// By: Stone Age Sculptor
+// License: CC0 (Public Domain)
+// Changes:
+//   Function pillow from Reddit user oldesole1 removed.
+//   He is working on his function to improve it.
 //
 // This version number is the overall version for everything in this file.
 // Some modules and functions in this file may have their own version.
@@ -154,80 +161,5 @@ module linear_extrude_chamfer(height=1,chamfer,chamfer_top,chamfer_bottom,angle,
   }  
 }
 
-
 // ==============================================================
-//
-// pillow
-// ------
-//
-// Version 1
-// December 5, 2024
-// By Reddit user: oldesole1
-// Origin: https://www.reddit.com/r/openscad/comments/1h717if/pillowing_using_roof
-// Licence: CC0 (Public Domain)
-//
-// Stone Age Sculptor asked: "May I use it in a Public Domain project?"
-// Answer by oldesole1: "Please be my guest and use this."
-//
 
-squared = function (step, steps) 
-  let(ratio = step / steps)
-  [1 - ratio^2, ratio];
-
-/**
- * size: Size of the edge curve.
- *   Single value or [x, y]
- * steps: Number of transition steps.
- * func: The tweening function used, takes 2 arguments (step, steps),
- *   and must return vector of 2 numbers.
- *   Defaults to following 90 degree arc.
- */
-module pillow(size, steps, func) 
-{
-  s_vals = is_list(size) ? size : [size, size];
-  
-  // Default function is to follow a 90 degree arc.
-  s_func = is_function(func) ? 
-    func : 
-    function (step, steps) 
-    let(ratio = step / steps)
-    [cos(ratio * 90), sin(ratio * 90)];
-  
-  // Product of two vectors.
-  function v_prod(v1, v2) = [v1.x * v2.x, v1.y * v2.y];
-  
-  // The visual artifacting can be extremely confusing 
-  // without render(), and with Manifold it's fast enough.
-  render()
-  {
-    // Last step is the top of the second-to-last step.
-    for(step = [0:steps - 1])
-    {
-      let(current = v_prod(s_func(step, steps), s_vals))
-      let(next = v_prod(s_func(step + 1, steps), s_vals))
-      // Slope of the roof for this step.
-      let(slope = abs((next.y - current.y) / (next.x - current.x)))
-
-      intersection()
-      {
-        translate([0, 0, current.y])
-          scale([1, 1, slope])
-            roof()
-              // 'delta' makes it chunky, so we use 'r';
-              offset(r = current.x - s_vals.x)
-                children();
-        
-        linear_extrude(next.y)
-          // Hull simplifies the geometry, 
-          // speeding intersection calculations.
-          hull()
-          // Use the 2d design to create the height clip object.
-          // This way we can clip the height
-          // no matter the position.
-            children();
-      }
-    }
-  }
-}
-
-// ==============================================================
