@@ -6,6 +6,16 @@
 // February 3, 2025
 // By: Stone Age Sculptor
 // License: CC0 (Public Domain)
+//
+// Version 2
+// February 4, 2025
+// By: Stone Age Sculptor
+// License: CC0 (Public Domain).
+// Changes:
+//   The function pillow() is removed from extrude.scad
+//   The file DemonstrationPillow.scad is removed.
+//   It was made by Reddit user oldesole1, but he is working on it himself to improve it.
+//
 // This version number is the overall version for the whole library.
 // Each file has its own version and sometimes there are
 // modules and function inside a file with their own version.
@@ -33,4 +43,3 @@ include <string.scad>
 include <tangentlines.scad>
 include <texture.scad>
 include <turtle.scad>
-
