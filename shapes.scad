@@ -6,6 +6,14 @@
 // February 3, 2025
 // By: Stone Age Sculptor
 // License: CC0 (Public Domain)
+//
+// Version 2
+// February 7, 2025
+// By: Stone Age Sculptor
+// License: CC0 (Public Domain)
+// Changes:
+//   Added "center" parameter to cylinder_fillet().
+//
 // This version number is the overall version for everything in this file.
 // Some modules and functions in this file may have their own version.
 
@@ -25,11 +33,14 @@
 //       and a negative value for a inward fillet.
 //   fillet_top = fillet for the top, overrides 'fillet'.
 //   fillet_bottom = fillet for the bottom, overrides 'fillet'.
+//   printable = add a 45 degrees angle at the bottom,
+//               to make it printable without support
+//   center = set to true to center it. Default false.
 //
 // Note: There is no check for a inward fillet that is too large.
 // To do: Allow any angle for the optional chamfer
 //        at the bottom.
-module cylinder_fillet(h,r=1,d,fillet,fillet_top,fillet_bottom,printable=false)
+module cylinder_fillet(h,r=1,d,fillet,fillet_top,fillet_bottom,printable=false,center=false)
 {
   radius = is_undef(d) ? r : d/2;
   epsilon = 0.001;
@@ -37,35 +48,39 @@ module cylinder_fillet(h,r=1,d,fillet,fillet_top,fillet_bottom,printable=false)
   filcommon = is_undef(fillet)        ? 0 : fillet;
   filtop    = is_undef(fillet_top)    ? filcommon : fillet_top;
   filbottom = is_undef(fillet_bottom) ? filcommon : fillet_bottom;
+  zshift    = center == true          ? -h/2       : 0;
 
-  if(filbottom < 0)
+  translate([0,0,zshift])
   {
-    translate([0,0,-filbottom])
-      mirror([0,0,1])
-        FilletInwards(radius,-filbottom,print=printable);
-  }
-  else if(filbottom > 0)
-  {
-    FilletOutwards(radius,filbottom);
-  }
+    if(filbottom < 0)
+    {
+      translate([0,0,-filbottom])
+        mirror([0,0,1])
+          FilletInwards(radius,-filbottom,print=printable);
+    }
+    else if(filbottom > 0)
+    {
+      FilletOutwards(radius,filbottom);
+    }
 
-  // The middle part is made larger towards the top and bottom,
-  // to be sure that the pieces connect.
-  larger_for_bottom = filbottom == 0 ? 0 : epsilon;
-  larger_for_top    = filtop    == 0 ? 0 : epsilon;
-  translate([0,0,abs(filbottom) - larger_for_bottom])
-    cylinder(h-abs(filtop)-abs(filbottom)+larger_for_top+larger_for_bottom,r=radius);
+    // The middle part is made larger towards the top and bottom,
+    // to be sure that the pieces connect.
+    larger_for_bottom = filbottom == 0 ? 0 : epsilon;
+    larger_for_top    = filtop    == 0 ? 0 : epsilon;
+    translate([0,0,abs(filbottom) - larger_for_bottom])
+      cylinder(h-abs(filtop)-abs(filbottom)+larger_for_top+larger_for_bottom,r=radius);
 
-  if(filtop < 0)
-  {
-    translate([0,0,h+filtop])
-      FilletInwards(radius,-filtop);
-  }
-  else if(filtop > 0)
-  {
-    translate([0,0,h])
-      mirror([0,0,1])
-        FilletOutwards(radius,filtop);
+    if(filtop < 0)
+    {
+      translate([0,0,h+filtop])
+        FilletInwards(radius,-filtop);
+    }
+    else if(filtop > 0)
+    {
+      translate([0,0,h])
+        mirror([0,0,1])
+          FilletOutwards(radius,filtop);
+    }
   }
 
   module FilletInwards(r_outer,r_tube,print=false)

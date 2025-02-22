@@ -6,6 +6,15 @@
 // February 3, 2025
 // By: Stone Age Sculptor
 // License: CC0 (Public Domain)
+//
+// Version 2
+// February 22, 2025
+// By: Stone Age Sculptor
+// License: CC0 (Public Domain)
+// Changes:
+//   Added the shorter commands, such as "FD" for "FORWARD".
+//   Added functions random(min,max) and randint(min,max)
+//
 // This version number is the overall version for everything in this file.
 // Some modules and functions in this file may have their own version.
 
@@ -17,9 +26,19 @@
 //   * Convert Python turtle text into a OpenSCAD turtle list.
 //       I checked OpenSCAD for how long a text can be,
 //       and it still worked with a text that is 1 million characters long.
-//   * Add COLOR, DOT (with color), PENSIZE, SHAPE
-//   * Perhaps even add REPEAT ?
-//   * Make an example with recursion.
+//   * Add a module that directly prints the resulting shape.
+//   * Add COLOR, DOT (with color), PENCOLOR, PENSIZE, SHAPE, 
+//       MODE, PENUP, PENDOWN, TELEPORT,
+//   * Is FILLING possible with the OpenSCAD fill() function?
+//   * A function random() that redirects to OpenSCAD rands?
+//   * Perhaps even add REPEAT?
+//   * Add 3D:
+//       UP, DOWN, (but those are short for PENUP, PENDOWN). 
+//       ROLL clockwise and counterclockwise
+//       CIRCLE not only left and right, but also up and down.
+//       HEADING in 3D coordinates
+//       SETZ
+
 
 // A list with turtle commands will be translated into coordinates.
 // Turtle commands:
@@ -47,17 +66,32 @@
 
 include <list.scad>
 
-LEFT = 100;
-RIGHT = 101;
-HOME = 102;
-FORWARD = 103;
-BACKWARD = 104;
-CIRCLE = 105;
-GOTO = 106;
-SETX = 107;
-SETY = 108;
-SETHEADING = 109;
-STAMP = 110;
+// Commands for the turtle.
+LEFT        = 100;
+LT          = 100;
+RIGHT       = 101;
+RT          = 101;
+HOME        = 102;
+FORWARD     = 103;
+FD          = 103;
+BACKWARD    = 104;
+BACK        = 104;
+BK          = 104;
+CIRCLE      = 105;
+GOTO        = 106;
+SETPOS      = 106;
+SETPOSITION = 106;
+SETX        = 107;
+SETY        = 108;
+SETHEADING  = 109;
+SETH        = 109;
+STAMP       = 110;
+MODE        = 111;
+
+// Definitions for the MODE:
+STANDARD    = 0;
+LOGO        = 1;
+
 
 // The default stamp in Python Turtle graphics is an arrow head.
 // The default angle is zero, therefor it points to the right.
@@ -82,6 +116,22 @@ module DrawPath(path,width=0.5)
   }
 }
 
+
+// TurtleToPath
+// ------------
+//
+// Turns a list with turtle commands into a path
+// for OpenSCAD.
+//
+// Parameters:
+//   turtlelist, a list with commands
+//   accuracy, the accuracy of arcs, default $fn
+//
+// Returns:
+//   A list with 2D coordinates.
+//
+// Start with the starting point [0,0],
+// then add the rest from the turtle commands.
 function TurtleToPath(turtlelist,accuracy=$fn) =
   concat([[0,0], each WalkTheTurtle(turtlelist=turtlelist,accuracy=accuracy)]);
  
@@ -191,5 +241,4 @@ function WalkTheTurtle(turtlelist,accuracy=$fn,index=0,angle=0,lastpos=[0,0]) =
     // A zero angle is in the direction of the postive x-axis.
     turtlelist[index][0] == HOME ?
       concat([[0,0]], WalkTheTurtle(turtlelist=turtlelist,accuracy=accuracy,index=index+1,angle=0,lastpos=[0,0])) : [] : [];
-
 

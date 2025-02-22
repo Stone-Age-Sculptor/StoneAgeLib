@@ -12,6 +12,14 @@
 // By: Stone Age Sculptor
 // Licence: CC0 (Public Domain)
 //   Added highlight to the Shadow2D() function.
+//
+// Version 4
+// February 22, 2025
+// By: Stone Age Sculptor
+// Licence: CC0 (Public Domain)
+//   Changed 'giga' from 100000 to 1000,
+//   because the large number causes visual jitter in preview.
+//
 
 // Shadow2D()
 // ----------
@@ -38,7 +46,7 @@ module Shadow2D(length=1,angle=-45,width=0,highlight=false)
   // and 2024 version of OpenSCAD, so I used
   // "0.001" to be sure.
   epsilon = 0.001;
-  giga    = 1000000;
+  giga    = 1000;
 
   if(highlight)
   {

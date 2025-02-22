@@ -16,6 +16,18 @@
 //   The file DemonstrationPillow.scad is removed.
 //   It was made by Reddit user oldesole1, but he is working on it himself to improve it.
 //
+// Version 3
+// February 22, 2025
+// By: Stone Age Sculptor
+// License: CC0 (Public Domain).
+// Changes:
+//   Perspective function added.
+//   Demonstration for 3D tubes added.
+//   Example for cylinder_fillet now also shows a fillet hole.
+//   Added "center" parameter to cylinder_fillet().
+//   Added file: DemonstrationTurtleRecursive.scad.
+//   Added file: DemonstrationTurtleLogo.scad.
+//
 // This version number is the overall version for the whole library.
 // Each file has its own version and sometimes there are
 // modules and function inside a file with their own version.
@@ -29,7 +41,7 @@
 // This library uses a OpenSCAD version of at least 2025.
 
 // The overall version of the library.
-VERSION_STONEAGELIB = 1;
+VERSION_STONEAGELIB = 3;
 
 include <color.scad>
 include <extrude.scad>
@@ -37,9 +49,11 @@ include <font.scad>
 include <interpolate.scad>
 include <inverseminkowski.scad>
 include <list.scad>
+include <perspective.scad>
 include <shadow.scad>
 include <shapes.scad>
 include <string.scad>
 include <tangentlines.scad>
 include <texture.scad>
 include <turtle.scad>
+
