@@ -9,9 +9,9 @@ Note: When using files from this library for a project that is published, then p
 
 This library is for a OpenSCAD version of at least 2025 with the features turned on and using "Manifold".
 
-## Documenation
+## Documentation
 
-Explanation about the library functions are in the [Wiki](https://github.com/Stone-Age-Sculptor/StoneAgeLib/wiki).
+[See the Wiki for the documentation](https://github.com/Stone-Age-Sculptor/StoneAgeLib/wiki).
 
 ## Examples
 
