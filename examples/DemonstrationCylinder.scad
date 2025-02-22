@@ -6,7 +6,14 @@
 // February 3, 2025
 // By: Stone Age Sculptor
 // License: CC0 (Public Domain)
-
+//
+// Version 2
+// February 7, 2025
+// By: Stone Age Sculptor
+// License: CC0 (Public Domain)
+// Changes:
+//   Added an example of a fillet hole in a block.
+//
 // Either include everything with
 // the file StoneAgeLib.scad, or
 // include only what is needed.
@@ -40,5 +47,22 @@ translate([30,0,0])
       sphere(2);
     translate([0,20,10])
       sphere(2);
+  }
+}
+
+// A block with a fillet round hole.
+thickness_plate = 15;
+translate([-30,0,10])
+{
+  difference()
+  {
+    // The block.
+    cube([20,thickness_plate,20],center=true);
+
+    // Remove a fillet cylinder with outward fillet.
+    // The correction of 0.005 is to avoid jitter
+    // in the preview.
+    rotate([90,0,0])
+      cylinder_fillet(h=thickness_plate+0.005,d=10,fillet=3,center=true);
   }
 }
