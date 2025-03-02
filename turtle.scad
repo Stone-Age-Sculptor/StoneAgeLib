@@ -15,6 +15,16 @@
 //   Added the shorter commands, such as "FD" for "FORWARD".
 //   Added functions random(min,max) and randint(min,max)
 //
+// Version 3
+// March 2, 2025
+// By: Stone Age Sculptor
+// License: CC0 (Public Domain)
+// Changes:
+//   The module DrawPath accepts now a path or a list of paths
+//   or a single point, and in 2D and 3D.
+//   Added TELEPORT command, but it is only possible
+//   as the first command for now.
+//
 // This version number is the overall version for everything in this file.
 // Some modules and functions in this file may have their own version.
 
@@ -38,7 +48,7 @@
 //       CIRCLE not only left and right, but also up and down.
 //       HEADING in 3D coordinates
 //       SETZ
-
+//
 
 // A list with turtle commands will be translated into coordinates.
 // Turtle commands:
@@ -62,6 +72,7 @@
 //   STAMP        Draw a stamp.
 //                The stamp is not drawn, but an arrow shape
 //                is added to the list of points.
+//   TELEPORT,x,y Only valid as first command at the moment.
 //
 
 include <list.scad>
@@ -87,6 +98,7 @@ SETHEADING  = 109;
 SETH        = 109;
 STAMP       = 110;
 MODE        = 111;
+TELEPORT    = 112;
 
 // Definitions for the MODE:
 STANDARD    = 0;
@@ -100,17 +112,73 @@ stamp =
   [0,0],[-1.2,-0.8],[-1.3,-0.65],[-0.7,0],[-1.3,0.65],[-1.2,0.8],[0,0]
 ];
 
+// The module DrawPath accepts a single point,
+// or a list of points for a path,
+// or a list of paths.
+// Both in 2D and 3D.
 module DrawPath(path,width=0.5)
 {
-  if(len(path) >= 2)
+  echo(len=len(path),path=path);
+
+  if(is_list(path[0][0]))
   {
-    for(i=[0:len(path)-2])
+    // The coordinates themselves are a 'list'.
+    // If there are coordinates at that level,
+    // then it is a list of paths.
+    // Each path is recursively solved.
+    for(i=[0:len(path)-1])
     {
-      hull()
+      DrawPath(path[i],width=width);
+    }
+  }
+  else if(is_list(path[0]))
+  {
+    // If there is a list at path[0],
+    // Then it is a single path or a single point.
+    if(len(path) == 1)
+    {
+      // A single point in a list is
+      // recursively called with that single point.
+      DrawPath(path[0],width=width);
+    }
+    else if(len(path) > 1)
+    {
+      // More that one point.
+      // That means it is a path between
+      // two points or more points.
+      for(i=[0:len(path)-2])
       {
-        for(j=[0,1])
-          translate(path[i+j])
-            circle(width);
+        hull()
+        {
+          for(j=[0,1])
+          {
+            translate(path[i+j])
+            {
+              if(is_undef(path[0].z))
+                circle(d=width);
+              else
+                sphere(d=width);
+            }
+          }
+        }
+      }
+    }
+  }
+  else
+  {
+    // There are no deeper levels in the path,
+    // that means it is a single coordinate.
+    // It could be an empty coordinate.
+    // There should be at least two numbers for 
+    // a 2D coordinate.
+    if(len(path) > 1)
+    {
+      translate(path)
+      {
+        if(is_undef(path.z))
+          circle(d=width);
+        else
+          sphere(d=width);
       }
     }
   }
@@ -133,7 +201,11 @@ module DrawPath(path,width=0.5)
 // Start with the starting point [0,0],
 // then add the rest from the turtle commands.
 function TurtleToPath(turtlelist,accuracy=$fn) =
-  concat([[0,0], each WalkTheTurtle(turtlelist=turtlelist,accuracy=accuracy)]);
+  turtlelist[0][0] == TELEPORT ?
+    let(x = turtlelist[0][1])
+    let(y = turtlelist[0][2])
+    concat([[x,y], each WalkTheTurtle(turtlelist=turtlelist,accuracy=accuracy,index=1,lastpos=[x,y])]) :
+    concat([[0,0], each WalkTheTurtle(turtlelist=turtlelist,accuracy=accuracy)]);
  
 // This function is recursive, going through all
 // the commands in the list.
@@ -190,7 +262,11 @@ function WalkTheTurtle(turtlelist,accuracy=$fn,index=0,angle=0,lastpos=[0,0]) =
       let(angle_start = angle - left_right*90)
       let(angle_end = angle_start + left_right*extend)
       // Calculate the number of steps, according to the $fn settings.
-      let(steps = floor(accuracy * abs(angle_end - angle_start)/360))
+      // When $fn is not specified, then its value is zero.
+      // A zero value will not show the arcs.
+      // Therefor it is set to minimal value of 15.
+      let(acc = max(accuracy,15))
+      let(steps = floor(acc * abs(angle_end - angle_start)/360))
       let(angle_step = (angle_end - angle_start) / steps)
       // Calculate a list with arc coordinates.
       // Keep the list empty, if there are no steps.

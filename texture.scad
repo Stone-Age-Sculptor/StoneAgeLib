@@ -8,11 +8,48 @@
 // License: CC0 (Public Domain)
 // The FlexHex stones are by "degroof" (Steve DeGroof), license CC0.
 //
+// Version 2
+// March 2, 2025
+// By: Stone Age Sculptor
+// License: CC0 (Public Domain)
+// Changes:
+//   Granules added.
+//
 // This version number is the overall version for everything in this file.
 // Some modules and functions in this file may have their own version.
 
 include <list.scad>
 
+// ==============================================================
+//
+// Granules
+// --------
+// A cube is made with a rough top surface.
+// It is almost like a wall with granules.
+// 
+module Granules(size=[100,100,1],density=8000)
+{
+  granules_height = 0.2;
+  epsilon = 0.001;
+
+  render(convexity=3)
+  {
+    // Make it a little higher to be sure that
+    // the granules connect.
+    cube([size.x,size.y,size.z-granules_height+epsilon]);
+
+    for(i=[0:density])
+    {
+      x = rands(0,size.x,1)[0];
+      y = rands(0,size.y,1)[0];
+      z = size.z-granules_height;
+      s = rands(0.6,1.5,1)[0];
+
+      translate([x,y,z])
+        cylinder(h=granules_height, r1=s,r2=s/2,$fn=6);
+    }
+  }
+}
 
 // ==============================================================
 //

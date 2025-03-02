@@ -19,6 +19,8 @@ if(version()[0] < 2022)
 //
 // Perspective
 // -----------
+// Turn a 2D shape into a perspective 2D shape.
+//
 // The baseline is the x-axis.
 // The middle is (0,0)
 // The vanishing point is on the y-axis.

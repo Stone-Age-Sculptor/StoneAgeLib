@@ -17,7 +17,7 @@
 //   It was made by Reddit user oldesole1, but he is working on it himself to improve it.
 //
 // Version 3
-// February 22, 2025
+// March 2, 2025
 // By: Stone Age Sculptor
 // License: CC0 (Public Domain).
 // Changes:
@@ -27,6 +27,18 @@
 //   Added "center" parameter to cylinder_fillet().
 //   Added file: DemonstrationTurtleRecursive.scad.
 //   Added file: DemonstrationTurtleLogo.scad.
+//
+// Version 4
+// March 2, 2025
+// By: Stone Age Sculptor
+// License: CC0 (Public Domain).
+// Changes:
+//   Added 7-segment display.
+//   File interpolate.scad is now called subdivision.scad
+//   Module outward_bevel_extrude() added.
+//   Updates to font.
+//   Name "linear_extrude_chamfer()" is
+//   changed to "chamfer_extrude()".
 //
 // This version number is the overall version for the whole library.
 // Each file has its own version and sometimes there are
@@ -41,18 +53,19 @@
 // This library uses a OpenSCAD version of at least 2025.
 
 // The overall version of the library.
-VERSION_STONEAGELIB = 3;
+VERSION_STONEAGELIB = 4;
 
 include <color.scad>
 include <extrude.scad>
 include <font.scad>
-include <interpolate.scad>
 include <inverseminkowski.scad>
 include <list.scad>
 include <perspective.scad>
+include <seven_segment.scad>
 include <shadow.scad>
 include <shapes.scad>
 include <string.scad>
+include <subdivision.scad>
 include <tangentlines.scad>
 include <texture.scad>
 include <turtle.scad>
