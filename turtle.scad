@@ -118,8 +118,6 @@ stamp =
 // Both in 2D and 3D.
 module DrawPath(path,width=0.5)
 {
-  echo(len=len(path),path=path);
-
   if(is_list(path[0][0]))
   {
     // The coordinates themselves are a 'list'.
