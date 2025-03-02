@@ -6,6 +6,13 @@
 // February 3, 2025
 // By: Stone Age Sculptor
 // License: CC0 (Public Domain)
+//
+// Version 2
+// March 2, 2025
+// By: Stone Age Sculptor
+// License: CC0 (Public Domain)
+// Changes:
+//   Granules added.
 
 // Either include everything with
 // the file StoneAgeLib.scad, or
@@ -59,3 +66,15 @@ translate([250,50])
             Crease2D();
   }
 }
+
+// Granules
+translate([50,-50])
+{
+  intersection()
+  {
+    cylinder(h=5,d=90);
+    translate([-45,-45,0])
+      Granules([90,90,5]);
+  }
+}
+

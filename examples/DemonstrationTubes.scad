@@ -13,7 +13,7 @@
 // include only what is needed.
 
 //include <StoneAgeLib/StoneAgeLib.scad>
-include <StoneAgeLib/interpolate.scad>
+include <StoneAgeLib/subdivision.scad>
 include <StoneAgeLib/shapes.scad>
 
 // Creating tubes in 3D with a hull over spheres

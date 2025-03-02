@@ -6,6 +6,13 @@
 // February 22, 2025
 // By: Stone Age Sculptor
 // License: CC0 (Public Domain)
+//
+// Version 2
+// March 2, 2025
+// By: Stone Age Sculptor
+// License: CC0 (Public Domain)
+// Changes:
+//   A second example added with shadow.
 
 // Either include everything with
 // the file StoneAgeLib.scad, or
@@ -13,10 +20,13 @@
 
 //include <StoneAgeLib/StoneAgeLib.scad>
 include <StoneAgeLib/perspective.scad>
+include <StoneAgeLib/shadow.scad>
+include <StoneAgeLib/font.scad>
 
 $fn=50;
 
-// Print the text with perspective.
+// Print text with perspective.
+// The default font of OpenSCAD is used.
 color("Navy")
   Perspective(0.4,40)  // strength, vanishing point on y-axis
     FullText();
@@ -29,6 +39,38 @@ color("Coral")
       square([155,56],center=true);
       square([154,55],center=true);
     }
+
+
+// A 2D example with the combination of:
+//   * Subdivision font (from the library)
+//   * Shadow           (from the library)
+//   * Perspective      (from the library)
+translate([0,-30])
+{
+  color("CornFlowerBlue")
+    Perspective(0.5,25)
+      Shape2D();
+  color("Black")
+    Perspective(0.5,25)
+      Shadow2D(length=5,angle=-90)
+        Shape2D();
+}
+
+// This module is used to show the text,
+// and it is used to make the shadow.
+module Shape2D()
+{
+  translate([-108,0])
+    text_subdivision(
+      "Control Room",
+      font="Subdivision Classic Font",
+      size=20,
+      weight=1.8,
+      spacing=1.2,
+      smooth=4,
+      method="weightedpath");
+}
+
 
 // Multiple lines of text.
 module FullText()
