@@ -1,6 +1,11 @@
 // DemonstrationShadowHeart.scad
 //
+// Demonstration for the StoneAgeLib
 //
+// Version 1
+// March 3, 2025
+// By: Stone Age Sculptor
+// License: CC0 (Public Domain)
 
 include <StoneAgeLib/StoneAgeLib.scad>
 
