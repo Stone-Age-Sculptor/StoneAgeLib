@@ -40,6 +40,15 @@
 //   Name "linear_extrude_chamfer()" is
 //   changed to "chamfer_extrude()".
 //
+// Version 5
+// June 4, 2025
+// By: Stone Age Sculptor
+// License: CC0 (Public Domain).
+// Changes:
+//   Added MirrorList(v,list).
+//   Removed most global variables.
+//   vector_add_2D() is renamed to vector_add() and is now for 2D and 3D.
+//
 // This version number is the overall version for the whole library.
 // Each file has its own version and sometimes there are
 // modules and function inside a file with their own version.
@@ -53,7 +62,7 @@
 // This library uses a OpenSCAD version of at least 2025.
 
 // The overall version of the library.
-VERSION_STONEAGELIB = 4;
+VERSION_STONEAGELIB = 5;
 
 include <color.scad>
 include <extrude.scad>

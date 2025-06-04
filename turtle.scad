@@ -25,6 +25,14 @@
 //   Added TELEPORT command, but it is only possible
 //   as the first command for now.
 //
+// Version 4
+// March 26, 2025
+// By: Stone Age Sculptor
+// License: CC0 (Public Domain)
+// Changes:
+//   Renamed "stamp" into "_turtle_stamp".
+//
+//
 // This version number is the overall version for everything in this file.
 // Some modules and functions in this file may have their own version.
 
@@ -48,6 +56,7 @@
 //       CIRCLE not only left and right, but also up and down.
 //       HEADING in 3D coordinates
 //       SETZ
+//       How about: Incline,Decline,Climb,Descend?
 //
 
 // A list with turtle commands will be translated into coordinates.
@@ -78,6 +87,8 @@
 include <list.scad>
 
 // Commands for the turtle.
+// These are global variables on purpose.
+// The user should not re-define them.
 LEFT        = 100;
 LT          = 100;
 RIGHT       = 101;
@@ -107,7 +118,7 @@ LOGO        = 1;
 
 // The default stamp in Python Turtle graphics is an arrow head.
 // The default angle is zero, therefor it points to the right.
-stamp =
+_turtle_stamp =
 [
   [0,0],[-1.2,-0.8],[-1.3,-0.65],[-0.7,0],[-1.3,0.65],[-1.2,0.8],[0,0]
 ];
@@ -115,7 +126,7 @@ stamp =
 // The module DrawPath accepts a single point,
 // or a list of points for a path,
 // or a list of paths.
-// Both in 2D and 3D.
+// Both in 2D (circles) and 3D (spheres).
 module DrawPath(path,width=0.5)
 {
   if(is_list(path[0][0]))
@@ -307,7 +318,7 @@ function WalkTheTurtle(turtlelist,accuracy=$fn,index=0,angle=0,lastpos=[0,0]) =
     // STAMP is not part of the returned list.
     // A stamp is created.
     turtlelist[index][0] == STAMP ?
-      let(newstamp = TranslateList(RotateList(stamp,angle),lastpos))
+      let(newstamp = TranslateList(RotateList(_turtle_stamp,angle),lastpos))
       concat(newstamp, WalkTheTurtle(turtlelist=turtlelist,accuracy=accuracy,index=index+1,angle=angle,lastpos=lastpos)) : 
 
     // HOME goes to (0,0)

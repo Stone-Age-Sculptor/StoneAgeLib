@@ -15,6 +15,13 @@
 // Changes:
 //   Granules added.
 //
+// Version 3
+// June 4, 2025
+// By: Stone Age Sculptor
+// License: CC0 (Public Domain)
+// Changes:
+//   vector_add_2D() is now called vector_add().
+//
 // This version number is the overall version for everything in this file.
 // Some modules and functions in this file may have their own version.
 
@@ -133,7 +140,7 @@ module Crease2D(pieces=8,variation=50,thickness=1.5)
   ];
 
   // Make a list with coordinates.
-  points = vector_add_2D(vectors); 
+  points = vector_add(vectors); 
 
   // Draw lines between the coordinates.
   // The offset is used to center the shape.

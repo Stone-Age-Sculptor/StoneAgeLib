@@ -6,12 +6,28 @@
 // February 3, 2025
 // By: Stone Age Sculptor
 // License: CC0 (Public Domain)
+//
+// Version 2
+// March 12, 2025
+// By: Stone Age Sculptor
+// License: CC0 (Public Domain)
+// Changes:
+//   MirrorList() added.
+//
+// Version 3
+// June 4, 2025
+// By: Stone Age Sculptor
+// License: CC0 (Public Domain)
+// Changes:
+//   vector_add_2D() is renamed to vector_add() and is now
+//   for 2D and 3D.
+//
 // This version number is the overall version for everything in this file.
 // Some modules and functions in this file may have their own version.
 
 
-// vector_add_2D
-// -------------
+// vector_add
+// ----------
 // Incremental add each item. Every item will be
 // the sum of all the previous items.
 // Used to concatenate vectors into a single path.
@@ -20,11 +36,14 @@
 // Return:
 //   A list where every item is the
 //   addition of all previous items.
-// This is only for 2D vectors, because the sum is started a [0,0]
-function vector_add_2D(v,index=0,sum=[0,0]) =
+// This function is for 2D and 3D.
+// The trick to start at zero for both 2D and 3D
+// is to subtract the first item by itself.
+function vector_add(v,index=0,sum) =
+  let(sum = is_undef(sum) ? v[0] - v[0] : sum)
   let(new_sum = sum + v[index]) 
   index < len(v) -1 ? 
-    [new_sum, each vector_add_2D(v,index+1,new_sum)] :
+    [new_sum, each vector_add(v,index+1,new_sum)] :
     [new_sum];
     
 
@@ -50,6 +69,23 @@ function ShuffleList(list) =
 // -------------
 // Reverse the order of any list.
 function ReverseList(list) = [for(i=[0:len(list)-1]) list[len(list)-1-i]];
+
+
+// MirrorList()
+// ------------
+// Mirror the coordinates according to the vector.
+// Example:  MirrorList([1,0,0],myList);
+// The list can be a list of 2D or 3D coordinates.
+// When the list has 2D coordinates and the
+// vector is 3D, then only the 2D part of the vector
+// is used.
+function MirrorList(v,list) =
+  let(sx = v.x != 0 ? -1 : 1)
+  let(sy = v.y != 0 ? -1 : 1)
+  is_num(list[0].z) ?
+    let(sz = v.z != 0 ? -1 : 1)
+    [for(item=list) [sx*item.x,sy*item.y,sz*item.z]] :
+    [for(item=list) [sx*item.x,sy*item.y]];
 
 
 // RandomNonOverlap

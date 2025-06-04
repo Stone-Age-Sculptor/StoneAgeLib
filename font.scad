@@ -35,6 +35,14 @@
 //   More characters added.
 //   File interpolate.scad is now called subdivision.scad.
 //
+// Version 6
+// June 4, 2025
+// By: Stone Age Sculptor
+// License: CC0 (Public Domain)
+// Changes:
+//   There was a $fn=20 for the low level of the circle
+//   for the shapes of the fonts. That is removed, it was a bug.
+//
 //
 // This version number is the overall version for everything in this file.
 // Some modules and functions in this file may have their own version.
@@ -274,12 +282,12 @@ module DefaultRender(list,width)
   {
     hull()
       for(point=[list[0],list[1]])
-        translate(point,$fn=20)
+        translate(point)
           circle(d=width);
   }
   else if(len(list)==1)
   {
-    translate(list[0],$fn=20)
+    translate(list[0])
       circle(d=width);
   }
 }
@@ -297,7 +305,7 @@ module DefaultRender(list,width)
 //      }
 //      else if(len(list)==1)
 //      {
-//        translate(list[0],$fn=20)
+//        translate(list[0])
 //          square(width,center=true);
 //      }
 //    }
