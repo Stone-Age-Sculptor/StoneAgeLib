@@ -13,6 +13,13 @@
 // License: CC0 (Public Domain)
 // Changes:
 //   Granules added.
+//
+// Version 3
+// July 20, 2025
+// By: Stone Age Sculptor
+// License: CC0 (Public Domain)
+// Changes:
+//   Checkered Steel Plate added.
 
 // Either include everything with
 // the file StoneAgeLib.scad, or
@@ -78,3 +85,13 @@ translate([50,-50])
   }
 }
 
+// Checkered Steel Plate
+translate([105,-95])
+{
+  color("LightSteelBlue")
+  {
+    cube([90,90,1]);
+    translate([5,5,1])
+      SteelPlate(8,8);
+  }
+}
