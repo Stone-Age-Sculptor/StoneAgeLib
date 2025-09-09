@@ -20,7 +20,14 @@
 // By: Stone Age Sculptor
 // License: CC0 (Public Domain)
 // Changes:
-//   vector_add_2D() is now called vector_add().
+//   Using new vector_add instead of vector_add_2D().
+//
+// Version 4
+// July 20, 2025
+// By: Stone Age Sculptor
+// License: CC0 (Public Domain)
+// Changes:
+//   SteelPlate() added for a checkered steel plate texture.
 //
 // This version number is the overall version for everything in this file.
 // Some modules and functions in this file may have their own version.
@@ -154,6 +161,80 @@ module Crease2D(pieces=8,variation=50,thickness=1.5)
       translate(points[i+1]-offset)
         circle(thickness,$fn=5);
     }
+  }
+}
+
+// ==============================================================
+//
+// SteelPlate
+// ----------
+// A checkered steel plate pattern in 3D.
+//
+// Parameters:
+//   xn : Number of shapes horizontal
+//        Default 10.
+//   yn : Number of shapes vertical.
+//        Default 10.
+//   spacing : The spacing between the shapes.
+//             Default 1.
+// Note 1:
+//   The shapes have a size of about 10
+//   and the height is 1.
+// Note 2:
+//   The total amount of shapes is not xn*yn,
+//   but twice that amount.
+module SteelPlate(xn=10,yn=10,spacing=1)
+{
+  // The shapes touch each other at
+  // a distance of about 4.3.
+  // That is the start for the spacing.
+  spacing_offset = 4.3;
+
+  sp = spacing_offset + spacing;
+  
+  for(y=[0:(2*yn)-1])
+  {
+    odd = y%2;  // 1 for every odd row
+
+    for(x=[0:xn-1])
+      translate([odd*sp+x*2*sp,y*sp,0])
+        rotate(45 - 90*odd)
+          OneCheckerShape();
+  }
+
+  module OneCheckerShape()
+  {
+    // Reduce the number of points
+    // with render().
+    render()
+    {
+      hull()
+      {
+        // The top.
+        // A little smaller than the bottom.
+        linear_extrude(1)
+          FlatShape2D(9.4,10);
+
+        // The bottom.
+        // The resulting length should be about 10.
+        linear_extrude(0.001)
+          FlatShape2D(11,12);
+      }
+    }
+  }
+
+  // The intersection of two circles is used for the shape.
+  // The pointy tips are a little rounded with offset().
+  module FlatShape2D(distance,radius)
+  {
+    offset(0.15)
+      intersection()
+      {
+        translate([distance,0])
+          circle(radius);
+        translate([-distance,0])
+          circle(radius);
+      }
   }
 }
 

@@ -49,6 +49,17 @@
 //   Removed most global variables.
 //   vector_add_2D() is renamed to vector_add() and is now for 2D and 3D.
 //
+// Version 6
+// September 9, 2025
+// By: Stone Age Sculptor
+// License: CC0 (Public Domain).
+// Changes:
+//   MakeFrame() added to extrude.scad.
+//   The roof() function is no longer needed for the crease texture.
+//   Function SteelPlate() added to texture.scad.
+//   Function substr() added to string.scad.
+//   Bug fix: replaced "\'" with "'" in font.scad.
+//
 // This version number is the overall version for the whole library.
 // Each file has its own version and sometimes there are
 // modules and function inside a file with their own version.
@@ -62,7 +73,7 @@
 // This library uses a OpenSCAD version of at least 2025.
 
 // The overall version of the library.
-VERSION_STONEAGELIB = 5;
+VERSION_STONEAGELIB = 6;
 
 include <color.scad>
 include <extrude.scad>

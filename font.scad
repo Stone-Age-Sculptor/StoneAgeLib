@@ -43,6 +43,14 @@
 //   There was a $fn=20 for the low level of the circle
 //   for the shapes of the fonts. That is removed, it was a bug.
 //
+// Version 7
+// September 7, 2025
+// By: Stone Age Sculptor
+// License: CC0 (Public Domain)
+// Changes:
+//   Replaced "\'" with "'".
+//   It worked in linux, but it is a bug in Windows.
+//
 //
 // This version number is the overall version for everything in this file.
 // Some modules and functions in this file may have their own version.
@@ -506,7 +514,7 @@ subdivision_font =
     ["\"",3,[[[0,10],[0,7]],[[3,10],[3,7]]]],
     ["“",5,[[[2,10],[0,8.5],[0.5,6.5],[1.5,7],[1.5,7.5],[1,7.5]],[[5,10],[3,8.5],[3.5,6.5],[4.5,7],[4.5,7.5],[4,7.5]]]],
     ["”",5,[[[0,6.5],[2,8],[1.5,10],[0.5,9.5],[0.5,8.5],[1,8.5]],[[3,6.5],[5,8],[4.5,10],[3.5,9.5],[3.5,8.5],[4,8.5]]]],
-    ["\'",1,[[[0,10],[0,7]]]],
+    ["'",1,[[[0,10],[0,7]]]],
     ["`",2,[[[0,10],[2,8]]]],
     ["°",4,[[[2,10],[0.5,9.8],[0.5,7],[3.5,7],[3.5,9.8],[2,10]]]],
     ["℃",11,[[[2,10],[0.5,9.8],[0.5,7],[3.5,7],[3.5,9.8],[2,10]],[[11,0],[5.5,0],[5.5,10],[11,10]]]],

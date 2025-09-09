@@ -6,6 +6,14 @@
 // February 3, 2025
 // By: Stone Age Sculptor
 // License: CC0 (Public Domain)
+//
+// Version 2
+// July 15, 2025
+// By: Stone Age Sculptor
+// License: CC0 (Public Domain)
+// Changes:
+//   Added substr() function.
+//
 // This version number is the overall version for everything in this file.
 // Some modules and functions in this file may have their own version.
 
@@ -94,5 +102,28 @@ function calculate_number(s,first,last) =
       char_to_num(s[last-1]) + 10*calculate_number(s,first,last-1) :
       char_to_num(s[first]):
       [];   // add nothing
+      
+// ======================================
+// substr(text,pos,len)
+// ======================================
+// Returns a substring, starting at 'pos' with length 'len'.
+// Parameters:
+//   text    The string.
+//   pos     Starting index.
+//           When it is below zero, then an
+//           empty string is returned.
+//   len     Number of characters to return.
+// Note:
+//   I have seen other substr() functions, 
+//   and I thought it can be simpler.
+//   This is the most simple that I can think of,
+//   including checks for wrong values of 'pos' and 'len'.
+//   After writing it, I compared it with the
+//   "substr()" of the BOSL2 library, and it uses
+//   the same 'pos+1' and 'len-1', so it works
+//   in the same way.
+function substr(text, pos=0, len=1, _grow="") =
+  let(maxpos = min(pos+len,len(text)))
+  (pos < maxpos && pos >= 0) ? substr(text,pos=pos+1,len=len-1,_grow=str(_grow, text[pos])) : _grow;
 
 // ==============================================================

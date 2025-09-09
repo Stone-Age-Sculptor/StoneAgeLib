@@ -24,6 +24,13 @@
 //   Name "linear_extrude_chamfer()" is
 //   changed to "chamfer_extrude()".
 //
+// Version 4
+// June 21, 2025
+// By: Stone Age Sculptor
+// License: CC0 (Public Domain)
+// Changes:
+//   MakeFrame() added.
+//
 // This version number is the overall version for everything in this file.
 // Some modules and functions in this file may have their own version.
 
@@ -243,6 +250,163 @@ module chamfer_extrude(height=1,chamfer,chamfer_top,chamfer_bottom,angle,angle_t
           offset(2)        // 1.0001 or 2 or any value above 1.
             children();
   }  
+}
+
+// ==============================================================
+//
+// MakeFrame
+// ---------
+// Make a frame from a 2D profile.
+// The frame is on top of the xy-plane, 
+// and centerend around (0,0).
+// The 2D profile should have the lower-left at (0,0),
+// with the height in y-direction and the 
+// inside profile in x-direction.
+// Parameters:
+//   width : The outside width
+//   height: The outside height
+//   radius: The radius of optional round corners.
+//   loop_thickness:
+//           The thickness of the loop.
+//           Default zero for no loop.
+// Warning:  There is no check if the round corner is possible.
+// Notes:    The frame consists of pieces added together,
+//           the ideal frame would use a polyhedron.
+//           A custom frame shape is not possible.
+// To do:    Optional holes in the frame for a screw or hook.
+module MakeFrame(width,height,radius=0,loop_thickness=0)
+{
+  e1 = 0.0001;
+
+  if(radius==0)
+  {
+    // Normal straight corners.
+    //
+    // The bars will be a little longer
+    // to be sure that they connect.
+    w1 = width + e1;
+    h1 = height + e1;
+
+    // bar on the right and mirrored for the left
+    for(m1=[0,1])
+      mirror([m1,0,0])
+        translate([width/2,0,0])
+          rotate([0,0,90])
+            MakeBarWithSlantedEnds(h1)
+              children();
+
+    // top bar and mirrored for the bottom
+    for(m1=[0,1])
+      mirror([0,m1,0])
+        translate([0,height/2,0])
+          rotate([0,0,180])
+            MakeBarWithSlantedEnds(w1)
+              children();
+  }
+  else
+  {
+    // With round corners.
+    //
+    // The straight pieces should connect to 
+    // the round corners, so they are made
+    // longer to be sure that they connect.
+    w2 = width - 2*radius + e1;
+    h2 = height - 2*radius + e1;
+
+    // bar on the right and mirrored for the left
+    for(m1=[0,1])
+      mirror([m1,0,0])
+        translate([width/2,0,0])
+          rotate([90,0,180])
+            linear_extrude(h2,center=true)
+              children();
+
+    // top bar and mirrored for the bottom
+    for(m1=[0,1])
+      mirror([0,m1,0])
+        translate([0,height/2,0])
+          rotate([90,0,-90])
+            linear_extrude(w2,center=true)
+              children();
+
+    // Round corners.
+    // The inside of the bar is in the x-direction.
+    // That could be flipped for the rotate_extrude,
+    // but here the 2D profile is shifted to the left.
+    for(mx=[0,1],my=[0,1])
+      mirror([mx,0,0])
+        mirror([0,my,0])
+          translate([-width/2+radius,-height/2+radius,0])
+            rotate_extrude(angle=90)
+              translate([-radius,0,0])
+                children();
+  }
+
+  // Using a fixed shape for the loop.
+  if(loop_thickness>0)
+  {
+    linear_extrude(loop_thickness)
+      translate([0,height/2+6])
+        Loop2D();
+  }
+}
+
+// A bar of the profile with slanted ends.
+module MakeBarWithSlantedEnds(length)
+{
+  // The profile could have a coordinate with a
+  // negative x value.
+  // To make that possible, the bar is
+  // made larger by 1000.
+  l2 = length + 1000;
+
+  // The resulting actual length.
+  l3 = length/2;
+
+  intersection()
+  {
+    rotate([90,0,90])
+      linear_extrude(l2,center=true,convexity=3)
+        children();
+
+    // A triangle to create the slanted ends.
+    //
+    // The profile could have a coordinate with a
+    // negative x or negative y value.
+    // To make that possible, the intersection triangle
+    // is made extra large and is also below 
+    // the xy-plane.
+    p = [[-2*l3,-l3],[2*l3,-l3],[0,l3]];
+    linear_extrude(10000,center=true)
+      polygon(p);
+  }
+}
+
+// A loop to hang the frame on a wall.
+// The shape is fixed for now.
+module Loop2D()
+{
+  width = 2;       // the width of the loop legs
+  leg_length = 8;  // leg length
+
+  // The circular piece at the top end.
+  difference()
+  {
+    // outside
+    circle(d=4*width);
+    // remove inside.
+    circle(d=2*width);
+    // remove the lower part.
+    translate([0,-10])
+      square(20,center=true);
+  }
+
+  // The legs (vertical pieces).
+  // The open middle has twice the width
+  // as the width of the legs.
+  for(xs=[-1,1])
+    translate([xs*(width+1),-leg_length/2+0.001])
+      square([width,leg_length],center=true);
 }
 
 // ==============================================================
