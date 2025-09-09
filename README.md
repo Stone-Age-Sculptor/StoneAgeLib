@@ -24,7 +24,7 @@ A function to create a 2D shadow or highlight can make a text look better with m
 A turtle to draw a shape. Its usage is similar to the Python Turtle graphics.
 ![Demonstration Turtle](images/DemonstrationTurtle.png)
 
-Textures that are created in a random way.
+Textures that are created in a random way (except the checkered steel plate).
 ![Demontration Texture](images/DemonstrationTexture.png)
 
 A chamfered extrusion.
