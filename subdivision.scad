@@ -16,6 +16,13 @@
 // Changes:
 //   The filename of this file is changed from interpolate.scad to subdivision.scad
 //
+// Version 3
+// October 14, 2025
+// By: Stone Age Sculptor
+// License: CC0 (Public Domain)
+// Changes:
+//   The function MethodSplitName() added.
+//
 // This version number is the overall version for everything in this file.
 // Some modules and functions in this file may have their own version.
 
@@ -35,6 +42,32 @@ module Round2D(radius=0)
       offset(delta=-radius)
         children();
 }
+
+
+
+// ==============================================================
+//
+// MethodSplitName
+// ---------------
+// The method for subdivision can have "path" at the end
+// of the name. This function returns both variants.
+//
+// Parameters:
+//   name: 
+//     The subdivision method as text.
+// Return:
+//   This function returns two strings, the first one
+//   without the path, the second one with the path,
+//   regardless if the input was with "path" at the end or not.
+//
+function MethodSplitName(name) =
+  let(n = len(name))
+  // let(withpath = (n >= 4 && name[n-4] == "p" && name[n-3] == "a" && name[n-2] == "t" && name[n-1] == "h") ? true : false)
+  let(withpath = (n >= 4 && name[n-4] == "p" && name[n-3] == "a" && name[n-2] == "t" && name[n-1] == "h"))
+  let(method_s = withpath ? substr(name,0,n-4) : name)
+  let(method_p = withpath ? name : str(name,"path"))
+  [method_s,method_p];
+
 
 // ==============================================================
 //

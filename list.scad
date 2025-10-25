@@ -51,8 +51,9 @@ function vector_add(v,index=0,sum) =
 // -----------
 // Shuffle the items of any list.
 // Method:
-//   A random item is selected. That is removed from
-//   the input list.
+//   A random item is selected.
+//   It is removed from the input list and added
+//   to the output list.
 //   The item is removed by combining what is on 
 //   the left and on the right of that item. 
 //   This is done recursively until the input list is empty.

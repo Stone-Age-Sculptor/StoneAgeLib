@@ -60,6 +60,16 @@
 //   Function substr() added to string.scad.
 //   Bug fix: replaced "\'" with "'" in font.scad.
 //
+// Version 7
+// Date: October 25, 2025
+// By: Stone Age Sculptor
+// License: CC0 (Public Domain).
+// Changes:
+//   Added the file "matrix.scad".
+//   Added the file "polyhedron.scad".
+//   Added the function MethodSplitName() to subdivision.scad.
+//
+//
 // This version number is the overall version for the whole library.
 // Each file has its own version and sometimes there are
 // modules and function inside a file with their own version.
@@ -73,14 +83,16 @@
 // This library uses a OpenSCAD version of at least 2025.
 
 // The overall version of the library.
-VERSION_STONEAGELIB = 6;
+VERSION_STONEAGELIB = 7;
 
 include <color.scad>
 include <extrude.scad>
 include <font.scad>
 include <inverseminkowski.scad>
 include <list.scad>
+include <matrix.scad>
 include <perspective.scad>
+include <polyhedron.scad>
 include <seven_segment.scad>
 include <shadow.scad>
 include <shapes.scad>
