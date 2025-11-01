@@ -69,6 +69,13 @@
 //   Added the file "polyhedron.scad".
 //   Added the function MethodSplitName() to subdivision.scad.
 //
+// Version 8
+// Date: November 1, 2025
+// By: Stone Age Sculptor
+// License: CC0 (Public Domain).
+// Changes:
+//   The MatrixVolume() function now also accepts a tube.
+//
 //
 // This version number is the overall version for the whole library.
 // Each file has its own version and sometimes there are
@@ -83,7 +90,7 @@
 // This library uses a OpenSCAD version of at least 2025.
 
 // The overall version of the library.
-VERSION_STONEAGELIB = 7;
+VERSION_STONEAGELIB = 8;
 
 include <color.scad>
 include <extrude.scad>

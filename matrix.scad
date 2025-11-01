@@ -8,6 +8,13 @@
 // License: CC0 (Public Domain)
 // Initial version, designed from scratch, tested with a few models.
 //
+// Version 2
+// November 1, 2025
+// By: Stone Age Sculptor
+// License: CC0 (Public Domain)
+// Changes:
+//   The MatrixVolume() function now accepts also a tube.
+//
 // This version number is the overall version for everything in this file.
 // Some modules and functions in this file may have their own version.
 //
@@ -244,16 +251,16 @@ function _MatrixAddMirrorOneRow(list) =
 //       The height or thickness that is given to the surface.
 //   center:
 //       Set to true to expand the surface in both directions.
+//   tube:
+//       Set to true if the shape is a tube.
 // Return:
 //   The return value is an array with points and faces
 //   (also called a VNF) to be used with a polyhedron.
 // Note:
 //   When the height is too high and the curves are too steep,
 //   then the polyhedron might no longer be a valid shape.
-// To do:
-//   Allow not only a surface, but also a tube.
 //
-function MatrixVolume(matrix,height,center=false) =
+function MatrixVolume(matrix,height,center=false,tube=false) =
   let(n = len(matrix))
   let(m = len(matrix[0]))
   let(t = n*m)
@@ -261,6 +268,8 @@ function MatrixVolume(matrix,height,center=false) =
   // use half the height in both directions.
   let(bottom = center ? _MatrixOffsetPoints(matrix,-height/2) : matrix)
   let(top    = center ? _MatrixOffsetPoints(matrix,height/2)  : _MatrixOffsetPoints(matrix,height))
+  let(m_max = tube ? m-1 : m-2)
+
   // Convert the matrix of the bottom and top into a single long list of points.
   let(points =
     [ 
@@ -271,37 +280,51 @@ function MatrixVolume(matrix,height,center=false) =
         for(j=[0:m-1]) 
           top[i][j],
     ])
+
   // Calculate the bottom faces.
+  // The columns wrap around in tube mode.
   let(bottomfaces =
     [
-      for(i=[0:n-2],j=[0:m-2])
-        [(i*m)+j, (i*m)+j+1, (i+1)*m+j+1, (i+1)*m+j],
+      for(i=[0:n-2],j=[0:m_max])
+        let(j_inc = (j+1) % m) 
+        [(i*m)+j, (i*m)+j_inc, (i+1)*m+j_inc, (i+1)*m+j],
     ])
+
   // Calculate the top faces.
+  // The columns wrap around in tube mode.
   let(topfaces =
     [
-      for(i=[0:n-2],j=[0:m-2])
-        [t+(i*m)+j, t+(i+1)*m+j, t+(i+1)*m+j+1, t+(i*m)+j+1],
+      for(i=[0:n -2],j=[0:m_max])
+        let(j_inc = (j+1) % m) 
+        [t+(i*m)+j, t+(i+1)*m+j, t+(i+1)*m+j_inc, t+(i*m)+j_inc],
     ])
+
   // Calculate the side faces.
+  // A tube with volume is wrapped around and
+  // has no right or left faces.
   let(sidefaces = 
     [
       // Front side faces.
-      for(i=[0:m-2])
-        [i, i+t, i+t+1, i+1],
+      for(j=[0:m_max])
+        let(j_inc = (j+1) % m)
+        [j, j+t, t+j_inc, j_inc],
 
       // Right side faces.
+      if(!tube)
       for(i=[0:n-2])
         [m-1+i*m,t+m-1+i*m,t+m-1+(i+1)*m,m-1+(i+1)*m],
     
       // Back side faces.
-      for(i=[0:m-2])
-        [t-1-i,2*t-1-i,2*t-2-i,t-2-i],
+      for(j=[0:m_max])
+        let(j_inc = (j+1) % m)
+        [t-1-j,2*t-1-j,2*t-1-(j_inc),t-1-(j_inc)],
    
       // Left side faces.
-      for(i=[0:n-2])
+      if(!tube)
+      for(i=[0:n -2])
         [t-m-i*m,2*t-m-i*m,2*t-m-(i+1)*m,t-m-(i+1)*m],
     ])
+
   // All faces together.
   let(faces = concat(bottomfaces,sidefaces,topfaces))
   // Return points and faces for a polyhedron.
