@@ -1,7 +1,8 @@
 # StoneAgeLib
 
-All sorts of scripts for OpenSCAD.
-The scripts are for 3D models for 3D printing.
+All sorts of scripts for OpenSCAD.  
+The scripts are for 3D models for 3D printing.  
+The library prioritizes practical results over mathematical correctness.
 
 An important aspect of this library is the CC0 (Public Domain) license.
 
