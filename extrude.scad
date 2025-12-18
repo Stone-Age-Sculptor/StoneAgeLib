@@ -2,23 +2,20 @@
 //
 // Part of the StoneAgeLib
 //
-// Version 1
-// February 3, 2025
 // By: Stone Age Sculptor
 // License: CC0 (Public Domain)
 //
+// Version 1
+// February 3, 2025
+//
 // Version 2
 // February 4, 2025
-// By: Stone Age Sculptor
-// License: CC0 (Public Domain)
 // Changes:
 //   Function pillow from Reddit user oldesole1 removed.
 //   He is working on his function to improve it.
 //
 // Version 3
 // March 2, 2025
-// By: Stone Age Sculptor
-// License: CC0 (Public Domain)
 // Changes:
 //   module outwards_bevel_extrude() added.
 //   Name "linear_extrude_chamfer()" is
@@ -26,10 +23,15 @@
 //
 // Version 4
 // June 21, 2025
-// By: Stone Age Sculptor
-// License: CC0 (Public Domain)
 // Changes:
 //   MakeFrame() added.
+//
+// Version 5
+// December 8, 2025
+// Changes:
+//   Added a default convexity of 3 for all functions.
+//
+//
 //
 // This version number is the overall version for everything in this file.
 // Some modules and functions in this file may have their own version.
@@ -57,7 +59,7 @@ if(version()[0] < 2024)
 // To do: 
 //   * Set the angle
 //   * Combine with linear_extrude_chamfer with negative chamfer
-module outward_bevel_extrude(height=1,bevel,bevel_top,bevel_bottom)
+module outward_bevel_extrude(height=1,bevel,bevel_top,bevel_bottom,convexity=3)
 {
   epsilon = 0.001;
 
@@ -66,7 +68,7 @@ module outward_bevel_extrude(height=1,bevel,bevel_top,bevel_bottom)
   bottombev = is_undef(bevel_bottom) ? bothbev : bevel_bottom;
   
   // Extrude the whole shape for the total height.
-  linear_extrude(height)
+  linear_extrude(height,convexity=convexity)
     children();
 
   if(bottombev > 0)
@@ -90,7 +92,7 @@ module outward_bevel_extrude(height=1,bevel,bevel_top,bevel_bottom)
     // That is used for the negative shape.
     difference()
     {
-      linear_extrude(bev,convexity=2)
+      linear_extrude(bev,convexity=convexity)
         offset(delta=bev+epsilon)
           children();
 
@@ -100,13 +102,13 @@ module outward_bevel_extrude(height=1,bevel,bevel_top,bevel_bottom)
       // that the difference removes
       // all of it.
       translate([0,0,-epsilon])
-      roof(convexity=4)
-        difference()
-        {
-          offset(delta=2*bev+epsilon)
+        roof(convexity=convexity)
+          difference()
+          {
+            offset(delta=2*bev+epsilon)
+              children();
             children();
-          children();
-        }
+          }
     }
   }
 }
@@ -160,7 +162,7 @@ module fake_roof(convexity)
         {
           render()
             translate([0,0,-epsilon])
-              linear_extrude(2*epsilon)
+              linear_extrude(2*epsilon,convexity=3)
                 difference()
                 {
                   square(boxsize+1,center=true);
@@ -188,7 +190,7 @@ module fake_roof(convexity)
 //   angle           : angle for top and bottom chamfer 1...89
 //   angle_top       : top angle, overrides 'angle'
 //   angle_bottom    : bottom angle, overrides 'angle'
-module chamfer_extrude(height=1,chamfer,chamfer_top,chamfer_bottom,angle,angle_top,angle_bottom)
+module chamfer_extrude(height=1,chamfer,chamfer_top,chamfer_bottom,angle,angle_top,angle_bottom,convexity=3)
 {
   bothchamf   = is_undef(chamfer)        ? 0 : chamfer;
   topchamf    = is_undef(chamfer_top)    ? bothchamf : chamfer_top;
@@ -224,7 +226,7 @@ module chamfer_extrude(height=1,chamfer,chamfer_top,chamfer_bottom,angle,angle_t
       // The middle part.
       color("#26E49C")
         translate([0,0,bottomchamf])
-          linear_extrude(height-bottomchamf-topchamf)
+          linear_extrude(height-bottomchamf-topchamf,convexity=convexity)
             children();
 
       // The top chamfer.
@@ -246,7 +248,7 @@ module chamfer_extrude(height=1,chamfer,chamfer_top,chamfer_bottom,angle,angle_t
     zupper = topchamf    == 0 ? height + zlower + 1 : height + zlower;
     color("#A4D3C1")
       translate([0,0,-zlower])
-        linear_extrude(height=zupper,convexity=3)
+        linear_extrude(height=zupper,convexity=convexity)
           offset(2)        // 1.0001 or 2 or any value above 1.
             children();
   }  
@@ -274,7 +276,7 @@ module chamfer_extrude(height=1,chamfer,chamfer_top,chamfer_bottom,angle,angle_t
 //           the ideal frame would use a polyhedron.
 //           A custom frame shape is not possible.
 // To do:    Optional holes in the frame for a screw or hook.
-module MakeFrame(width,height,radius=0,loop_thickness=0)
+module MakeFrame(width,height,radius=0,loop_thickness=0,convexity=5)
 {
   e1 = 0.0001;
 
@@ -292,7 +294,7 @@ module MakeFrame(width,height,radius=0,loop_thickness=0)
       mirror([m1,0,0])
         translate([width/2,0,0])
           rotate([0,0,90])
-            MakeBarWithSlantedEnds(h1)
+            MakeBarWithSlantedEnds(h1,convexity)
               children();
 
     // top bar and mirrored for the bottom
@@ -300,7 +302,7 @@ module MakeFrame(width,height,radius=0,loop_thickness=0)
       mirror([0,m1,0])
         translate([0,height/2,0])
           rotate([0,0,180])
-            MakeBarWithSlantedEnds(w1)
+            MakeBarWithSlantedEnds(w1,convexity)
               children();
   }
   else
@@ -318,7 +320,7 @@ module MakeFrame(width,height,radius=0,loop_thickness=0)
       mirror([m1,0,0])
         translate([width/2,0,0])
           rotate([90,0,180])
-            linear_extrude(h2,center=true)
+            linear_extrude(h2,center=true,convexity=convexity)
               children();
 
     // top bar and mirrored for the bottom
@@ -326,7 +328,7 @@ module MakeFrame(width,height,radius=0,loop_thickness=0)
       mirror([0,m1,0])
         translate([0,height/2,0])
           rotate([90,0,-90])
-            linear_extrude(w2,center=true)
+            linear_extrude(w2,center=true,convexity=convexity)
               children();
 
     // Round corners.
@@ -345,14 +347,14 @@ module MakeFrame(width,height,radius=0,loop_thickness=0)
   // Using a fixed shape for the loop.
   if(loop_thickness>0)
   {
-    linear_extrude(loop_thickness)
+    linear_extrude(loop_thickness,convexity=convexity)
       translate([0,height/2+6])
         Loop2D();
   }
 }
 
 // A bar of the profile with slanted ends.
-module MakeBarWithSlantedEnds(length)
+module MakeBarWithSlantedEnds(length,convexity=3)
 {
   // The profile could have a coordinate with a
   // negative x value.
@@ -366,7 +368,7 @@ module MakeBarWithSlantedEnds(length)
   intersection()
   {
     rotate([90,0,90])
-      linear_extrude(l2,center=true,convexity=3)
+      linear_extrude(l2,center=true,convexity=convexity)
         children();
 
     // A triangle to create the slanted ends.
@@ -377,7 +379,7 @@ module MakeBarWithSlantedEnds(length)
     // is made extra large and is also below 
     // the xy-plane.
     p = [[-2*l3,-l3],[2*l3,-l3],[0,l3]];
-    linear_extrude(10000,center=true)
+    linear_extrude(10000,center=true,convexity=convexity)
       polygon(p);
   }
 }

@@ -2,10 +2,11 @@
 //
 // Part of the StoneAgeLib
 //
-// Version 1
-// October 25, 2025
 // By: Stone Age Sculptor
 // License: CC0 (Public Domain)
+//
+// Version 1
+// October 25, 2025
 // Initial version, designed from scratch, not fully tested.
 //
 // This version number is the overall version for everything in this file.
@@ -179,9 +180,15 @@ function PolyhedronAdd(VNF,points) =
 // Use a list of 2D points (for a polygon),
 // and turn them into 3D points at a certain height.
 // It is used to convert 2D slices into a vase.
+//
+// This function will be replaced by TranslateList().
 function Lift2D (points,height=1) =
-  [for(i=[0:len(points)-1]) [points[i].x,points[i].y,height]];
-
+  echo("🟠 The function Lift2D() is depreciated, use TransferList().") 
+  // Old function:
+  //  [for(i=[0:len(points)-1]) [points[i].x,points[i].y,height]];
+  // New function:
+  TranslateList(points,height);
+  
 
 // ==============================================================
 //

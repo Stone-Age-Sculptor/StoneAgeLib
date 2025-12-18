@@ -2,15 +2,14 @@
 //
 // Part of the StoneAgeLib
 //
-// Version 1
-// February 3, 2025
 // By: Stone Age Sculptor
 // License: CC0 (Public Domain)
 //
+// Version 1
+// February 3, 2025
+//
 // Version 2
 // February 4, 2025
-// By: Stone Age Sculptor
-// License: CC0 (Public Domain).
 // Changes:
 //   The function pillow() is removed from extrude.scad
 //   The file DemonstrationPillow.scad is removed.
@@ -18,8 +17,6 @@
 //
 // Version 3
 // March 2, 2025
-// By: Stone Age Sculptor
-// License: CC0 (Public Domain).
 // Changes:
 //   Perspective function added.
 //   Demonstration for 3D tubes added.
@@ -30,8 +27,6 @@
 //
 // Version 4
 // March 2, 2025
-// By: Stone Age Sculptor
-// License: CC0 (Public Domain).
 // Changes:
 //   Added 7-segment display.
 //   File interpolate.scad is now called subdivision.scad
@@ -42,8 +37,6 @@
 //
 // Version 5
 // June 4, 2025
-// By: Stone Age Sculptor
-// License: CC0 (Public Domain).
 // Changes:
 //   Added MirrorList(v,list).
 //   Removed most global variables.
@@ -51,8 +44,6 @@
 //
 // Version 6
 // September 9, 2025
-// By: Stone Age Sculptor
-// License: CC0 (Public Domain).
 // Changes:
 //   MakeFrame() added to extrude.scad.
 //   The roof() function is no longer needed for the crease texture.
@@ -62,8 +53,6 @@
 //
 // Version 7
 // Date: October 25, 2025
-// By: Stone Age Sculptor
-// License: CC0 (Public Domain).
 // Changes:
 //   Added the file "matrix.scad".
 //   Added the file "polyhedron.scad".
@@ -71,10 +60,25 @@
 //
 // Version 8
 // Date: November 1, 2025
-// By: Stone Age Sculptor
-// License: CC0 (Public Domain).
 // Changes:
 //   The MatrixVolume() function now also accepts a tube.
+//
+// Version 9
+// Date: December 18, 2025
+// Changes:
+//   - The function MatrixAddMirror() in matrix.scad
+//     now accepts a vector and can also mirror the y-values.
+//   - MatrixVolume() is now trying to fix unreliable edge points.
+//   - MatrixAddNoise() and MatrixForce() added. 
+//   - Experimental MatrixDisc functions added to matrix.scad.
+//   - Changed the headers of all files, the text with
+//     "By: Stone Age Sculptor" and "License: CC0 (Public Domain)"
+//     is now mentioned once at the top and no longer at each version.
+//   - Function TranslateList() in list.scad updated for 2D and 3D.
+//   - The examples have now only the common file included,
+//     no longer the individual files that were used.
+//   - The method "weighted" in subdivision.scad is
+//     now called "cubic".
 //
 //
 // This version number is the overall version for the whole library.
@@ -90,7 +94,7 @@
 // This library uses a OpenSCAD version of at least 2025.
 
 // The overall version of the library.
-VERSION_STONEAGELIB = 8;
+VERSION_STONEAGELIB = 9;
 
 include <color.scad>
 include <extrude.scad>

@@ -2,23 +2,20 @@
 //
 // Part of the StoneAgeLib
 //
-// Version 1
-// February 3, 2025
 // By: Stone Age Sculptor
 // License: CC0 (Public Domain)
 //
+// Version 1
+// February 3, 2025
+//
 // Version 2
 // February 22, 2025
-// By: Stone Age Sculptor
-// License: CC0 (Public Domain)
 // Changes:
 //   Added the shorter commands, such as "FD" for "FORWARD".
 //   Added functions random(min,max) and randint(min,max)
 //
 // Version 3
 // March 2, 2025
-// By: Stone Age Sculptor
-// License: CC0 (Public Domain)
 // Changes:
 //   The module DrawPath accepts now a path or a list of paths
 //   or a single point, and in 2D and 3D.
@@ -27,8 +24,6 @@
 //
 // Version 4
 // March 26, 2025
-// By: Stone Age Sculptor
-// License: CC0 (Public Domain)
 // Changes:
 //   Renamed "stamp" into "_turtle_stamp".
 //

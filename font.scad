@@ -2,23 +2,21 @@
 //
 // Part of the StoneAgeLib
 //
-// Version 2
-// December 31, 2024
 // By: Stone Age Sculptor
 // License: CC0 (Public Domain)
+//
+// Version 2
+// December 31, 2024
 // Font shape data and code to show a text with it.
 //
 // Version 3
 // February 3, 2025
-// By: Stone Age Sculptor
-// License: CC0 (Public Domain)
+// Changes:
 //   Multiple fonts.
 //   Adjustments to character shapes.
 //
 // Version 4
 // February 22, 2025
-// By: Stone Age Sculptor
-// License: CC0 (Public Domain)
 // Changes:
 //   More characters.
 //   Adjustment to character shapes.

@@ -2,10 +2,11 @@
 //
 // Part of the StoneAgeLib
 //
-// Version 1
-// February 7, 2025
 // By: Stone Age Sculptor
 // License: CC0 (Public Domain)
+//
+// Version 1
+// February 7, 2025
 //
 // This version number is the overall version for everything in this file.
 // Some modules and functions in this file may have their own version.

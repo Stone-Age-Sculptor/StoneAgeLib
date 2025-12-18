@@ -2,30 +2,27 @@
 //
 // Part of the StoneAgeLib
 //
+// By: 
+//   Stone Age Sculptor
+//   Steve DeGroof (the irregular hexagon pattern)
+// License: CC0 (Public Domain)
+//
 // Version 1
 // February 3, 2025
-// By: Stone Age Sculptor
-// License: CC0 (Public Domain)
 // The FlexHex stones are by "degroof" (Steve DeGroof), license CC0.
 //
 // Version 2
 // March 2, 2025
-// By: Stone Age Sculptor
-// License: CC0 (Public Domain)
 // Changes:
 //   Granules added.
 //
 // Version 3
 // June 4, 2025
-// By: Stone Age Sculptor
-// License: CC0 (Public Domain)
 // Changes:
 //   Using new vector_add instead of vector_add_2D().
 //
 // Version 4
 // July 20, 2025
-// By: Stone Age Sculptor
-// License: CC0 (Public Domain)
 // Changes:
 //   SteelPlate() added for a checkered steel plate texture.
 //

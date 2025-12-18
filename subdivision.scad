@@ -2,26 +2,30 @@
 //
 // Part of the StoneAgeLib
 //
-// Version 1
-// February 3, 2025
 // By: Stone Age Sculptor
 // License: CC0 (Public Domain)
+//
+// Version 1
+// February 3, 2025
 // This version number is the overall version for everything in this file.
 // Some modules and functions in this file may have their own version.
 //
 // Version 2
 // February 27, 2025
-// By: Stone Age Sculptor
-// License: CC0 (Public Domain)
 // Changes:
 //   The filename of this file is changed from interpolate.scad to subdivision.scad
 //
 // Version 3
 // October 14, 2025
-// By: Stone Age Sculptor
-// License: CC0 (Public Domain)
 // Changes:
 //   The function MethodSplitName() added.
+//
+// Version 4
+// December 12, 2025
+// Changes:
+//   Bug fixed for the assert() message when an unknown method was
+//   used in Subdivision().
+//   The method for subdivision called "weighted" is now called "cubic".
 //
 // This version number is the overall version for everything in this file.
 // Some modules and functions in this file may have their own version.
@@ -101,24 +105,29 @@ function MethodSplitName(name) =
 //   divisions: The number of divisions.
 //              0 for no smoothing, 5 is extra smooth.
 //   method:    The subdivision method:
-//              "1"        A basic 1,1 weighted subdivision
-//                         for a closed shape.
-//              "1path"    A basic 1,1 weighted subdivision
-//                         for a path.
-//              "weighted" A weighted average subdivision
-//                         for a closed shape.
-//              "weightedpath"
-//                         A weighted average subdivision
-//                         for a path.
+//              "1"         A basic 1,1 weighted subdivision
+//                          for a closed shape.
+//              "1path"     A basic 1,1 weighted subdivision
+//                          for a path.
+//              "cubic"     A weighted average subdivision
+//                          for a closed shape.
+//              "cubicpath" A weighted average subdivision
+//                          for a path.
 // Return:
 //   A new list with a smoother shape.
 
 function Subdivision(list,divisions=2,method="1") =
   method=="1"            ? _Subdivision11(list,divisions) :
   method=="1path"        ? _Subdivision11Path(list,divisions) :
-  method=="weighted"     ? _SubdivisionWeighted(list,divisions) : 
-  method=="weightedpath" ? _SubdivisionWeightedPath(list,divisions) : 
-  assert(false,"Unknown method in Subdivision",divisions);
+  method=="cubic"        ? _SubdivisionCubic(list,divisions) : 
+  method=="cubicpath"    ? _SubdivisionCubicPath(list,divisions) : 
+  // The names "weighted" and "weightedpath" are depreciated,
+  // they are now called "cubic" and "cubicpath".
+  method=="weighted"     ? echo("🟠 The method weighted is now called cubic.") 
+                           _SubdivisionCubic(list,divisions) : 
+  method=="weightedpath" ? echo("🟠 The method weightedpath is now called cubicpath.")
+                           _SubdivisionCubicPath(list,divisions) : 
+  assert(false, str("Unknown method \"", method, "\" in Subdivision"));
 
 // This is the most basic subdivision with 1,1 weighting.
 // It will work in 2D and 3D.
@@ -144,7 +153,7 @@ function _Subdivision11Path(list,divisions) =
     _Subdivision11Path([ list[0], for(i=[1:n]) each [ (list[i] + list2[i-1])/2, (list[i] + list2[i])/2 ], list[n+1]], divisions-1) : list;
 
 
-// My own attempt with variable weighting.
+// My own attempt with variable cubic weighting.
 // The goal was a smoothing algoritme that feels
 // like NURBS.
 // Explanation:
@@ -164,20 +173,21 @@ function _Subdivision11Path(list,divisions) =
 // a circle when the control points is a square.
 // It is some kind of cubic B-spline, but I don't 
 // know if it matches with one of the known algoritmes.
-function _SubdivisionWeighted(list,divisions) =
+function _SubdivisionCubic(list,divisions) =
   divisions > 0 && len(list) > 2 ?
     let (weight = sqrt(2) - 1)
     let (n = len(list)-1)
     let (list2 = [ for(i=[0:n]) (list[i] + list[(i+1) > n ? 0 : i+1])/2 ])
     let (list3 = [ for(i=[0:n]) (weight*list[i] + (1-weight)/2*(list2[i] + list2[(i-1) < 0 ? n : i-1])) ])
-  _SubdivisionWeighted([ for(i=[0:n]) each [list3[i], list2[i]] ], divisions-1) : list;
+  _SubdivisionCubic([ for(i=[0:n]) each [list3[i], list2[i]] ], divisions-1) : list;
 
-// My own attempt with variable weighting.
+// My own attempt with variable cubic weighting.
 // But now for a path with a open begin and end.
-function _SubdivisionWeightedPath(list,divisions) =
+function _SubdivisionCubicPath(list,divisions) =
   divisions > 0 && len(list) > 2 ?
     let (weight = sqrt(2) - 1)
     let (n = len(list)-2)
     let (list2 = [ for(i=[0:n]) (list[i] + list[i+1])/2 ])
     let (list3 = [ list[0], for(i=[1:n]) (weight*list[i] + (1-weight)/2*(list2[i] + list2[i-1])), list[n+1] ])
-  _SubdivisionWeightedPath([ for(i=[0:n]) each [list3[i], list2[i]], list3[n+1] ],divisions-1) : list;
+  _SubdivisionCubicPath([ for(i=[0:n]) each [list3[i], list2[i]], list3[n+1] ],divisions-1) : list;
+

@@ -2,30 +2,35 @@
 //
 // Part of the StoneAgeLib
 //
-// Version 1
-// February 3, 2025
 // By: Stone Age Sculptor
 // License: CC0 (Public Domain)
 //
+// Version 1
+// February 3, 2025
+//
 // Version 2
 // March 12, 2025
-// By: Stone Age Sculptor
-// License: CC0 (Public Domain)
 // Changes:
 //   MirrorList() added.
 //
 // Version 3
 // June 4, 2025
-// By: Stone Age Sculptor
-// License: CC0 (Public Domain)
 // Changes:
 //   vector_add_2D() is renamed to vector_add() and is now
 //   for 2D and 3D.
+//
+// Version 4
+// November 30, 2025
+// Changes:
+//   TranslateList() updated, it is now for 2D and 3D and
+//   for a matrix (coordinates in rows and columns).
 //
 // This version number is the overall version for everything in this file.
 // Some modules and functions in this file may have their own version.
 
 
+// ==============================================================
+//
 // vector_add
 // ----------
 // Incremental add each item. Every item will be
@@ -47,6 +52,8 @@ function vector_add(v,index=0,sum) =
     [new_sum];
     
 
+// ==============================================================
+//
 // ShuffleList
 // -----------
 // Shuffle the items of any list.
@@ -66,12 +73,16 @@ function ShuffleList(list) =
     concat(list[index],ShuffleList(concat(left,right))) : [];
     
     
+// ==============================================================
+//
 // ReverseList()
 // -------------
 // Reverse the order of any list.
 function ReverseList(list) = [for(i=[0:len(list)-1]) list[len(list)-1-i]];
 
 
+// ==============================================================
+//
 // MirrorList()
 // ------------
 // Mirror the coordinates according to the vector.
@@ -89,6 +100,8 @@ function MirrorList(v,list) =
     [for(item=list) [sx*item.x,sy*item.y]];
 
 
+// ==============================================================
+//
 // RandomNonOverlap
 // ----------------
 // Randomly Distribute Shapes Over An Area Without Overlap.
@@ -120,6 +133,8 @@ function RandomNonOverlap(n,area,dist,list=[]) =
     list;
 
 
+// ==============================================================
+//
 // ShortestDistance
 // ----------------
 // Calculate the shortest distance from
@@ -138,7 +153,13 @@ function ShortestDistance(point,list) =
   len(distances) > 0 ? min(distances) : 10000;
 
 
+// ==============================================================
+// 
+// RotateList
+// ----------
 // Rotate a list (a 2D shape) around (0,0)
+// To do: Make it compatible with a list of 3D coordinates
+//        and a matrix of 3D rows and columns.
 function RotateList(list,angle) = 
   [for(c=list) 
    let(l=norm(c))
@@ -146,8 +167,59 @@ function RotateList(list,angle) =
    [l*cos(a+angle),l*sin(a+angle)]];
 
 
-// Move a list (a 2D shape) to a location.
+// ==============================================================
+//
+// TranslateList
+// -------------
+// Move a list with coordinates to a location.
+// Parameters:
+//   list:
+//     A list of 2D points, or a list of 3D points,
+//     or a matrix of 3D points.
+//   point:
+//     The changes for the new coordinates.
+// Return:
+//   2D list + value       : 3D list at height of value
+//   3D list + value       : 3D list, lifted in z-direction
+//   2D list + 2D point    : 2D list
+//   2D list + 3D point    : 3D list
+//   3D list + 2D point    : 3D list
+//   3D list + 3D point    : 3D list
+//   3D matrix + 3D point  : 3D matrix
 function TranslateList(list,point) =
-  [for(c=list) 
-   [point.x+c.x,point.y+c.y]];
+  let(is_matrix = is_num(list[0][0].x))
+  let(is_2D = is_undef(list[0].z) && is_undef(point.z) && !is_num(point))
+  let(is_none = is_undef(point))
+  // Translate a value or a 2D point into a 3D point.
+  let(p1 = is_num(point) ? [0,0,point] : point)
+  let(p2 = is_undef(p1.z) ? [p1.x,p1.y,0] : p1)
+  let(new_list =
+    is_none ?
+      list :
+    is_2D ?
+      [ for(c=list) 
+        [ p2.x+c.x,p2.y+c.y ]] :
+    is_matrix ?
+      let(n = len(list))
+      let(m = len(list[0]))
+      [ 
+        for(i=[0:n-1])
+        [
+          for(j=[0:m-1])
+            [ list[i][j].x + p2.x,
+              list[i][j].y + p2.y,
+              list[i][j].z + p2.z ]
+        ]
+      ] :
+    // The input is not a matrix, and the result is in 3D.
+    // The input could still be a list of 2D points.      
+      let(n = len(list))
+      [
+        for(i=[0:n-1])
+          let(z = is_undef(list[i].z) ? 0 : list[i].z)
+            [ list[i].x + p2.x,
+              list[i].y + p2.y,
+              z + p2.z ]
+      ])
+  new_list;
 

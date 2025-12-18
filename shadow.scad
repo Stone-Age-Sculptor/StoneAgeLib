@@ -2,21 +2,18 @@
 //
 // Part of the StoneAgeLib
 //
+// By: Stone Age Sculptor
+// Licence: CC0 (Public Domain)
+//
 // Version 2
 // July 9, 2024
-// by Stone Age Sculptor
-// Licence: CC0 (Public Domain)
 //
 // Version 3
 // February 3, 2025
-// By: Stone Age Sculptor
-// Licence: CC0 (Public Domain)
 //   Added highlight to the Shadow2D() function.
 //
 // Version 4
 // February 22, 2025
-// By: Stone Age Sculptor
-// Licence: CC0 (Public Domain)
 //   Changed 'giga' from 100000 to 1000,
 //   because the large number causes visual jitter in preview.
 //

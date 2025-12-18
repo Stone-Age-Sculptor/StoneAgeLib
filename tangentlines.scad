@@ -2,10 +2,13 @@
 //
 // Part of the StoneAgeLib
 //
+// By: 
+//   - Stone Age Sculptor
+//   - Reddit user ImpatientProf
+// License: CC0 (Public Domain)
+//
 // Version 1
 // September 27, 2024
-// By: Stone Age Sculptor
-// License: CC0 (Public Domain)
 //
 // Version 2.01
 // September 27, 2024
@@ -13,14 +16,11 @@
 // https://www.reddit.com/r/openscad/comments/1fqa33m/i_spent_a_few_days_in_tangent_lines/
 // The improvements by ImpatientProf were incorporated 
 // in this script by me (Stone Age Sculptor).
-// License: CC0 (Public Domain)
 // Version 2.01 has a few fixes in the comments,
 // after publishing Version 2.
 //
 // Version 3
 // October 6, 2024
-// By Stone Age Sculptor
-// License: CC0 (Public Domain)
 // Added two functions:
 //   IntersectionPoints()
 //     The two coordinates of overlapping circles.
