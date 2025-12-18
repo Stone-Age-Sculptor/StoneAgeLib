@@ -2,17 +2,17 @@
 //
 // Demonstration for the StoneAgeLib
 //
-// Version 1
-// February 3, 2025
 // By: Stone Age Sculptor
 // License: CC0 (Public Domain)
+//
+// Version 1
+// February 3, 2025
+//
+// Version 2
+// November 30, 2025
+// Only the "StoneAgeLib.scad" is included now.
 
-// Either include everything with
-// the file StoneAgeLib.scad, or
-// include only what is needed.
-
-//include <StoneAgeLib/StoneAgeLib.scad>
-include <StoneAgeLib/color.scad>
+include <StoneAgeLib/StoneAgeLib.scad>
 
 $fa = 5;
 $fs = 2;

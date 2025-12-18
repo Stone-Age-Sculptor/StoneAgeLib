@@ -2,10 +2,17 @@
 //
 // Demonstration for the StoneAgeLib
 //
-// Version 1
-// November 10, 2025
 // By: Stone Age Sculptor
 // License: CC0 (Public Domain)
+//
+// Version 1
+// November 10, 2025
+//
+// Version 2
+// December 13, 2025
+// Changes:
+//   There was a number 1.1 for the
+//   z-offset, but that was not needed.
 
 include <StoneAgeLib/StoneAgeLib.scad>
 
@@ -21,7 +28,7 @@ matrix =
   for(y=[-1:step:1])
   [
     for(x=[-1:step:1])
-      [x,y,1.1+(x*x)-(y*y)],
+      [x,y,(x*x)-(y*y)],
   ],
 ];
 

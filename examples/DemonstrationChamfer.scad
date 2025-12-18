@@ -2,27 +2,24 @@
 //
 // Demonstration for the StoneAgeLib
 //
-// Version 1
-// February 3, 2025
 // By: Stone Age Sculptor
 // License: CC0 (Public Domain)
 //
+// Version 1
+// February 3, 2025
+//
 // Version 2
 // March 2, 2025
-// By: Stone Age Sculptor
-// License: CC0 (Public Domain)
 // Changes:
 //   Name "linear_extrude_chamfer()" is
 //   changed to "chamfer_extrude()".
 //   Examples for outward_bevel_extrude() added.
+//
+// Version 3
+// November 30, 2025
+// Only the "StoneAgeLib.scad" is included now.
 
-// Either include everything with
-// the file StoneAgeLib.scad, or
-// include only what is needed.
-
-//include <StoneAgeLib/StoneAgeLib.scad>
-include <StoneAgeLib/extrude.scad>
-include <StoneAgeLib/subdivision.scad>
+include <StoneAgeLib/StoneAgeLib.scad>
 
 // Please use a OpenSCAD version of 2025 or newer,
 // because the roof() function is used for the chamfer.

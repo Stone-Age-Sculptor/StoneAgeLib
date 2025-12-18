@@ -2,26 +2,24 @@
 //
 // Demonstration for the StoneAgeLib
 //
-// Version 1
-// February 22, 2025
 // By: Stone Age Sculptor
 // License: CC0 (Public Domain)
 //
+// Version 1
+// February 22, 2025
+//
 // Version 2
 // March 2, 2025
-// By: Stone Age Sculptor
-// License: CC0 (Public Domain)
 // Changes:
 //   A second example added with shadow.
+//
+// Version 3
+// December 12, 2025
+// Changes:
+//   Only the "StoneAgeLib.scad" is included now.
+//   The method "weightedpath" is now called "cubicpath".
 
-// Either include everything with
-// the file StoneAgeLib.scad, or
-// include only what is needed.
-
-//include <StoneAgeLib/StoneAgeLib.scad>
-include <StoneAgeLib/perspective.scad>
-include <StoneAgeLib/shadow.scad>
-include <StoneAgeLib/font.scad>
+include <StoneAgeLib/StoneAgeLib.scad>
 
 $fn=50;
 
@@ -68,7 +66,7 @@ module Shape2D()
       weight=1.8,
       spacing=1.2,
       smooth=4,
-      method="weightedpath");
+      method="cubicpath");
 }
 
 

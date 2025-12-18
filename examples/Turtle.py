@@ -1,9 +1,10 @@
 # Turtle.py
 #
-# Version 1
-# February 3, 2025
 # by Stone Age Sculptor
 # License CC0
+#
+# Version 1
+# February 3, 2025
 
 # A test for the Python Turtle graphics.
 # To test if a similar result can be achieved in OpenSCAD.

@@ -2,32 +2,27 @@
 //
 // Demonstration for the StoneAgeLib
 //
-// Version 1
-// February 3, 2025
 // By: Stone Age Sculptor
 // License: CC0 (Public Domain)
 //
+// Version 1
+// February 3, 2025
+//
 // Version 2
 // March 2, 2025
-// By: Stone Age Sculptor
-// License: CC0 (Public Domain)
 // Changes:
 //   Granules added.
 //
 // Version 3
 // July 20, 2025
-// By: Stone Age Sculptor
-// License: CC0 (Public Domain)
 // Changes:
 //   Checkered Steel Plate added.
+//
+// Version 4
+// November 30, 2025
+// Only the "StoneAgeLib.scad" is included now.
 
-// Either include everything with
-// the file StoneAgeLib.scad, or
-// include only what is needed.
-
-//include <StoneAgeLib/StoneAgeLib.scad>
-include <StoneAgeLib/texture.scad>
-include <StoneAgeLib/extrude.scad>
+include <StoneAgeLib/StoneAgeLib.scad>
 
 // Use at least a 2025 version of OpenSCAD.
 // A 2021 version uses a fake roof() function,

@@ -2,10 +2,15 @@
 //
 // Demonstration for the StoneAgeLib
 //
-// Version 1
-// March 3, 2025
 // By: Stone Age Sculptor
 // License: CC0 (Public Domain)
+//
+// Version 1
+// March 3, 2025
+//
+// Version 2
+// November 30, 2025
+// Only the "StoneAgeLib.scad" is included now.
 
 include <StoneAgeLib/StoneAgeLib.scad>
 

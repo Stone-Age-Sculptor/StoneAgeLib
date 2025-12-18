@@ -2,18 +2,19 @@
 //
 // Demonstration for the StoneAgeLib
 //
-// Version 1
-// February 10, 2025
 // By: Stone Age Sculptor
 // License: CC0 (Public Domain)
+//
+// Version 1
+// February 10, 2025
+//
+// Version 2
+// December 12, 2025
+// Changes:
+//   Only the "StoneAgeLib.scad" is included now.
+//   The method "weightedpath" is now called "cubicpath".
 
-// Either include everything with
-// the file StoneAgeLib.scad, or
-// include only what is needed.
-
-//include <StoneAgeLib/StoneAgeLib.scad>
-include <StoneAgeLib/font.scad>
-include <StoneAgeLib/shadow.scad>
+include <StoneAgeLib/StoneAgeLib.scad>
 
 $fn=50;
 
@@ -53,5 +54,5 @@ color("LawnGreen")
 // in the Subdivision Font.
 module Shape2D()
 {
-  text_subdivision("🐢",weight=0.5,method="weightedpath",smooth=4);
+  text_subdivision("🐢",weight=0.5,method="cubicpath",smooth=4);
 }

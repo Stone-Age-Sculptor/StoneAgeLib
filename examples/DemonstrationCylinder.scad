@@ -2,10 +2,11 @@
 //
 // Demonstration for the StoneAgeLib
 //
-// Version 1
-// February 3, 2025
 // By: Stone Age Sculptor
 // License: CC0 (Public Domain)
+//
+// Version 1
+// February 3, 2025
 //
 // Version 2
 // February 7, 2025
@@ -14,12 +15,11 @@
 // Changes:
 //   Added an example of a fillet hole in a block.
 //
-// Either include everything with
-// the file StoneAgeLib.scad, or
-// include only what is needed.
+// Version 3
+// November 30, 2025
+// Only the "StoneAgeLib.scad" is included now.
 
-//include <StoneAgeLib/StoneAgeLib.scad>
-include <StoneAgeLib/shapes.scad>
+include <StoneAgeLib/StoneAgeLib.scad>
 
 $fn = 50;
 

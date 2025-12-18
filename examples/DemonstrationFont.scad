@@ -2,25 +2,25 @@
 //
 // Demonstration for the StoneAgeLib
 //
-// Version 1
-// February 3, 2025
 // By: Stone Age Sculptor
 // License: CC0 (Public Domain)
 //
+// Version 1
+// February 3, 2025
+//
 // Version 2
 // February 22, 2025
-// By: Stone Age Sculptor
-// License: CC0 (Public Domain)
 // Changes:
 //   The parameter "slanting" is now called "slant".
 //   Show lower case classic font.
+//
+// Version 3
+// December 12, 2025
+// Changes:
+//   Only the "StoneAgeLib.scad" is included now.
+//   The method "weightedpath" is now called "cubicpath".
 
-// Either include everything with
-// the file StoneAgeLib.scad, or
-// include only what is needed.
-
-//include <StoneAgeLib/StoneAgeLib.scad>
-include <StoneAgeLib/font.scad>
+include <StoneAgeLib/StoneAgeLib.scad>
 
 $fn = 50;
 
@@ -62,7 +62,7 @@ translate([0,-120])
 translate([0,-135])
   text_subdivision("Coarse",weight=1.3,method="1path",smooth=1);
 translate([60,-135])
-  text_subdivision("Smooth",weight=1.3,method="weightedpath",smooth=5);
+  text_subdivision("Smooth",weight=1.3,method="cubicpath",smooth=5);
 
 module Stripes()
 {

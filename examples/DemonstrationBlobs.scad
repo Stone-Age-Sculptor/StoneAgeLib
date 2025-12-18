@@ -2,16 +2,18 @@
 //
 // Demonstration for the StoneAgeLib
 //
-// Version 1
-// February 3, 2025
 // By: Stone Age Sculptor
 // License: CC0 (Public Domain)
+//
+// Version 1
+// February 3, 2025
+//
+// Version 2
+// December 12, 2025
+// Changes:
+//   Only the "StoneAgeLib.scad" is included now.
+//   The method "weighted" is now called "cubic".
 
-// This demonstration uses the next
-// parts from the library:
-//   * color.scad
-//   * interpolation.scad
-//   * list.scad
 
 include <StoneAgeLib/StoneAgeLib.scad>
 
@@ -39,7 +41,7 @@ walls = [ for(i=[0:number_of_walls-1])
 for(i=[0:number_of_walls-2])
 {
   piece = concat(walls[i],ReverseList(walls[i+1]));
-  blob = Subdivision(piece,method="weighted");
+  blob = Subdivision(piece,method="cubic");
   offset(5)
     offset(-6)
       polygon(blob);

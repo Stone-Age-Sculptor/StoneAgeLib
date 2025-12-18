@@ -2,19 +2,19 @@
 //
 // Demonstration for the StoneAgeLib
 //
-// Version 1
-// February 7, 2025
 // By: Stone Age Sculptor
 // License: CC0 (Public Domain)
+//
+// Version 1
+// February 7, 2025
+//
+// Version 2
+// December 12, 2025
+// Changes:
+//   Only the "StoneAgeLib.scad" is included now.
+//   The method "weightedpath" is now called "cubicpath".
 
-
-// Either include everything with
-// the file StoneAgeLib.scad, or
-// include only what is needed.
-
-//include <StoneAgeLib/StoneAgeLib.scad>
-include <StoneAgeLib/subdivision.scad>
-include <StoneAgeLib/shapes.scad>
+include <StoneAgeLib/StoneAgeLib.scad>
 
 // Creating tubes in 3D with a hull over spheres
 // is not optimal. Other (better) libraries use
@@ -37,7 +37,7 @@ color("LimeGreen")
 points3D = [[0,-10,10],[0,-10,15],[0,0,20],[0,10,15],[0,10,10]];
 
 // Create a smooth path from the control points.
-path3D = Subdivision(points3D,divisions=3,method="weightedpath");
+path3D = Subdivision(points3D,divisions=3,method="cubicpath");
 
 // Show the control points in Red.
 *color("Red")
