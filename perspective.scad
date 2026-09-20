@@ -8,12 +8,16 @@
 // Version 1
 // February 7, 2025
 //
-// This version number is the overall version for everything in this file.
-// Some modules and functions in this file may have their own version.
+// Version 2
+// February 16, 2026
+// Changes:
+//   Changed the text of the warning message.
+//
+
 
 if(version()[0] < 2022)
 {
-  echo("Warning: Version of OpenSCAD is too old.");
+  echo("🟡 Warning: Version of OpenSCAD is too old.");
 }
 
 // ======================================================

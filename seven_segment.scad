@@ -12,8 +12,11 @@
 // March 26, 2025
 //   Removed the global variables.
 //
-// This version number is the overall version for everything in this file.
-// Some modules and functions in this file may have their own version.
+// Version 3
+//   June 30, 2026
+//   Adjusted the 7-segment for uppercase 'N' and lowercase 'o'.
+//
+
 
 include <turtle.scad>
 
@@ -82,8 +85,8 @@ module Draw7Segment(string,spacing=1.2,angle=8,shrink=0.12,style=0,_index=0,_xpo
     [ "J", "bcd"     ],
     [ "K", "befg"    ],
     [ "L", "def"     ],
-    [ "M", "egc"     ],
-    [ "N", "egc"     ],
+    [ "M", "efabc"   ],
+    [ "N", "efabc"   ],
     [ "O", "abcdef"  ],
     [ "P", "efabg"   ],
     [ "Q", "gfabc"   ],
@@ -110,7 +113,7 @@ module Draw7Segment(string,spacing=1.2,angle=8,shrink=0.12,style=0,_index=0,_xpo
     [ "l", "fed"     ],
     [ "m", "egc"     ],
     [ "n", "egc"     ],
-    [ "o", "efdcba"  ],
+    [ "o", "egcd"    ],
     [ "p", "fabge"   ],
     [ "q", "fabgc"   ],
     [ "r", "eg"      ],

@@ -13,8 +13,19 @@
 // Changes:
 //   Added "center" parameter to cylinder_fillet().
 //
-// This version number is the overall version for everything in this file.
-// Some modules and functions in this file may have their own version.
+// Version 3
+// January 2, 2026
+// Changes:
+//   The heart2D had its own version number.
+//   That is removed, it is now part of the version of this file.
+//   Information from that function:
+//     heart2D Version 1, June 4, 2024
+//
+// Version 4
+// June 3, 2026
+// Changes:
+//   Added RoundedCube().
+//
 
 
 // cylinder_fillet
@@ -129,10 +140,36 @@ module cylinder_fillet(h,r=1,d,fillet,fillet_top,fillet_bottom,printable=false,c
 
 // ==============================================================
 //
+// RoundedCube
+// -----------
+//
+// A simple module to make a rounded cube (or cuboid) by
+// using spheres in the corners.
+//
+// Parameters:
+//   size   : The size in 3D, as [x_size,y_size,z_size],
+//            or just a value for the same value for all.
+//   r      : The radius of the rounded corners.
+//   center : set to true to put it around [0,0,0].
+module RoundedCube(size,r,center=false)
+{
+  size3D = is_undef(size.z) ? [size,size,size] : size;
+  offset = center ? -size3D/2 : [0,0,0];
+
+  if(r==0)
+    cube(size3D,center=center);   
+  else if(r>0)
+    translate(offset)
+      hull()
+        for(x=[r,size3D.x-r],y=[r,size3D.y-r],z=[r,size3D.z-r])
+          translate([x,y,z])
+            sphere(r);
+}
+
+// ==============================================================
+//
 // heart2D
 // -------
-// June 4, 2024, Version 1
-// by Stone Age Sculptor, CC0, Public Domain
 //
 // The lower part of the heart is a sine curve on its side.
 // The upper part consists of two circle.

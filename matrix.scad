@@ -22,9 +22,14 @@
 //   MatrixAddNoise(), MatrixForce(), MatrixRotateExtrude() added.
 //   MatrixVolume can detect unreliable edge-points and fix it.
 //
+// Version 4
+// July 2026
+// Changes:
+//   The internally used function "_MatrixOffsetPoints()" is now 
+//   a normal library function called:"MatrixNormalOffset()".
 //
-// This version number is the overall version for everything in this file.
-// Some modules and functions in this file may have their own version.
+//
+//
 //
 // Note: The term "VNF" is borrowed from the BOSL2 library.
 //       It stands for "Vertices aNd Faces" and is an array
@@ -120,6 +125,9 @@ function MatrixSubdivision(matrix,divisions=$preview?2:4,method="1",tube=false,s
 //   The return is an array with points and faces 
 //   as a VNF to be used with a polyhedron.
 //
+// To do: For some shapes, not every point
+//        should be extruded down.
+//        It is hard to detect.
 function MatrixExtrudeDown(matrix) = 
   let(n = len(matrix))       // Number of rows.
   let(m = len(matrix[0]))    // Number of columns.
@@ -285,14 +293,18 @@ function _MatrixAddMirrorX(matrix) =
 // Create a mirror on the negative x-axis for one row.
 // When the first x-value is zero, then that one is not mirrored,
 // because it is in the middle.
+//
+// If the [x,y,z] do not exist, but it is a single number instead,
+// then it might be an extra number along the real matrix data.
+// Those numbers will be mirrored in the same way.
 function _MatrixAddMirrorXOneRow(list) =
    let(n=len(list))
    let(skip = (list[0].x == 0) ? 1 : 0)
    let(left = [for(i=[0:n-1-skip]) [-list[n-1-i].x,list[n-1-i].y,list[n-1-i].z]])
    let(right = [for(i=[0:n-1]) list[i]])
    concat(left,right); 
+
   
-   
 // ==============================================================
 //
 // MatrixVolume()
@@ -308,9 +320,15 @@ function _MatrixAddMirrorXOneRow(list) =
 //       They are the row and columns of a matrix.
 //       It could be a subdivided matrix.
 //   height:
-//       The height or thickness that is given to the surface.
-//       If the faces are inside-out, then the height can
-//       be made negative.
+//       The height is a single number for all points,
+//       or a matrix with the height for each point.
+//       Single number:
+//         The height or thickness that is given to the surface.
+//         If the faces are inside-out, then the height can
+//         be made negative.
+//       Matrix of heights:
+//         The number of rows and columns must be the same
+//         as the matrix.
 //   center:
 //       Set to true to expand the surface in both directions.
 //   tube:
@@ -328,8 +346,8 @@ function MatrixVolume(matrix,height,center=false,tube=false) =
   let(t = n*m)
   // Use the input parameter 'matrix' as bottom, or
   // use half the height in both directions.
-  let(bottom = center ? _MatrixOffsetPoints(matrix,-height/2) : matrix)
-  let(top    = center ? _MatrixOffsetPoints(matrix,height/2)  : _MatrixOffsetPoints(matrix,height))
+  let(bottom = center ? MatrixNormalOffset(matrix,-height/2) : matrix)
+  let(top    = center ? MatrixNormalOffset(matrix,height/2)  : MatrixNormalOffset(matrix,height))
   let(m_max = tube ? m-1 : m-2)
 
   // Convert the matrix of the bottom and top into a single long list of points.
@@ -395,15 +413,29 @@ function MatrixVolume(matrix,height,center=false,tube=false) =
 
 // ==============================================================
 //
-// _MatrixOffsetPoints
-// -------------------
-// A helper function for MatrixVolume().
-// A new matrix of points is created with
+// MatrixNormalOffset
+// ------------------
+// A new matrix of points (of a surface) is created with
 // an offset of "height" according to the normal vectors.
+// This is not the same as scaling the surface, since
+// the normal vector of each point is used for the direction.
+// Parameters:
+//   matrix: A two-dimensional matrix with 3D points
+//   height: A single number or a matrix with the 
+//           height for each point.
+// Note:
+//   Some normal vectors at the edge can not be 
+//   calculated mathematically. In that case the
+//   best normal vector is guessed and the 
+//   irregular result might be visible.
 // Return: 
 //   A matrix with the same rows and columns,
 //   but the coordinates have an offset.
-function _MatrixOffsetPoints(matrix,height) =
+// To do:
+//   The new points might overlap in a dent in the surface.
+//   They should be rearranged while keeping the shape,
+//   so the order of points is the same as the original.
+function MatrixNormalOffset(matrix,height) =
   let(n = len(matrix))         // rows
   let(m = len(matrix[0]))      // columns
   let(new_matrix =
@@ -474,7 +506,8 @@ function _MatrixOffsetPoints(matrix,height) =
           q == 4 ? (NV[0]+NV[1]+NV[2]+NV[3])/4 : [])
     
         // Set the thickness, the avg vector has a length of 1.
-        let(normal = height*avg)
+        let(normal = is_undef(height[0]) ?
+          height*avg : height[i][j]*avg)
 
         // Finally a new point.
         let(new_point = matrix[i][j] + normal)

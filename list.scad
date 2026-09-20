@@ -25,8 +25,7 @@
 //   TranslateList() updated, it is now for 2D and 3D and
 //   for a matrix (coordinates in rows and columns).
 //
-// This version number is the overall version for everything in this file.
-// Some modules and functions in this file may have their own version.
+
 
 
 // ==============================================================

@@ -9,8 +9,6 @@
 // October 25, 2025
 // Initial version, designed from scratch, not fully tested.
 //
-// This version number is the overall version for everything in this file.
-// Some modules and functions in this file may have their own version.
 //
 // Note: The term "VNF" is borrowed from the BOSL2 library.
 //       It stands for "Vertices aNd Faces" and is an array

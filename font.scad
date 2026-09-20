@@ -27,37 +27,35 @@
 //
 // Version 5
 // March 2, 2025
-// By: Stone Age Sculptor
-// License: CC0 (Public Domain)
 // Changes:
 //   More characters added.
 //   File interpolate.scad is now called subdivision.scad.
 //
 // Version 6
 // June 4, 2025
-// By: Stone Age Sculptor
-// License: CC0 (Public Domain)
 // Changes:
 //   There was a $fn=20 for the low level of the circle
 //   for the shapes of the fonts. That is removed, it was a bug.
 //
 // Version 7
 // September 7, 2025
-// By: Stone Age Sculptor
-// License: CC0 (Public Domain)
 // Changes:
 //   Replaced "\'" with "'".
 //   It worked in linux, but it is a bug in Windows.
 //
-//
-// This version number is the overall version for everything in this file.
-// Some modules and functions in this file may have their own version.
+// Version 8
+// April 20, 2026
+// Changes:
+//   The method for the subdivision can be the
+//   name of the method without the "path" at the end.
+//   A few more character definitions added to the font.
+//   The type of the font is added to the font data.
 
 
 include <subdivision.scad>
 
 // The next line is for development.
-//FontDesigner("Subdivision Font",method="weightedpath");
+//FontDesigner("Subdivision Font",method="cubic");
 
 
 // ==============================================================
@@ -138,7 +136,7 @@ include <subdivision.scad>
 // To do: Implement halign better, implement valign.
 //        Make assert() when font name is not found or just ignore.
 //
-module text_subdivision(text,size=10,font="Subdivision Font",halign="left",valign="baseline",spacing=1,line_spacing=3,weight=1,slant=0,method="1path",smooth=2,fontdefinition,custom=false,t,_index=0,_xoffset=0,_yoffset=0)
+module text_subdivision(text,size=10,font="Subdivision Font",halign="left",valign="baseline",spacing=1,line_spacing=3,weight=1,slant=0,method="1",smooth=2,fontdefinition,custom=false,t,_index=0,_xoffset=0,_yoffset=0)
 {
   // Print the characters according to the width.
   // Only one character is printed. This function is
@@ -153,6 +151,7 @@ module text_subdivision(text,size=10,font="Subdivision Font",halign="left",valig
     // avoid that the normal order of parameters is disturbed.
     stringcommon = is_undef(t)    ? "" : t;
     string       = is_undef(text) ? stringcommon : text;
+    _method      = MethodSplitName(method)[1];
 
     // I think that a default spacing of 3 is okay.
     char_spacing = 3 * spacing;
@@ -203,7 +202,7 @@ module text_subdivision(text,size=10,font="Subdivision Font",halign="left",valig
             {
               for(i=[0:len(points)-1])
               {
-                path = Subdivision(points[i],divisions=smooth,method=method);
+                path = Subdivision(points[i],divisions=smooth,method=_method);
 
                 // The font design is for a height of 10.
                 // The 'size' parameter scales everything.
@@ -331,21 +330,37 @@ function GetFontIndex(font_definition,char) =
 
 // Font data
 // ---------
-// Each character can consist of multiple curves.
-// The size is about 10 high.
+// The default size is for characters of about 10 high.
 //
 // Font data:
-//   Name of the font
-//   The character
-//   the width
-//   a list of curves
+//   [0][0]     Name of the font (text).
+//   [0][1]     Author of the font (text).
+//   [0][2]     License (text).
+//   [0][3]     Type or identifier of the data (number).
+//              1: The font is made with curved and straight lines.
+//                 Each character can consist of multiple curves.
 //
-// A character that is not in the list, is printed
+//              Other types can be bezier curves with enclosed surfaces,
+//              or pixel fonts, or file names with heightmaps,
+//              or the shapes of a seven-segment display. 
+//
+//   [1][c][0]  The character. It can be a UTF-8 character.
+//   [1][c][1]  The width of the character.
+//   [1][c][2]  A list of curves to be used with subdivision.
+//              Sharp corners are created by splitting the curve
+//              into two curves. The sharp corner is the end-point
+//              of one curve and the begin-point of the other curve.
+//
+// A character that is not in the list, should be printed
 // as the block from the first character.
+//
+// To do: There are some inconsistancies with the spacing between the characters,
+//        the reason might have to do with the wrong value of the width.
+
 
 subdivision_font =
 [
-  ["Subdivision Font", "Stone Age Sculptor", "CC0 (Public Domain)"],
+  ["Subdivision Font", "Stone Age Sculptor", "CC0 (Public Domain)", 1],
   [
     [chr(127),8,[[[0,0],[0,10]],[[0,10],[8,10]],[[8,10],[8,0]],[[8,0],[0,0]]]],
     ["a",5,[[[0.5,6.5],[2,7],[4.5,6],[4,0.5],[5,0]],[[4.05,4],[0,4.5],[0,0],[4.2,1]]]],
@@ -359,7 +374,9 @@ subdivision_font =
     ["c",5,[[[5,6.5],[0,7],[0,0],[5,0.5]]]],
     ["ç",5,[[[5,7],[0,7.5],[0,2],[5,2.5]],[[3.3,2],[3.3,0],[1.6,0]]]],
     ["ć",5,[[[5,6.5],[0,7],[0,0],[5,0.5]],[[2.3,8.7],[3.7,10]]]],
+    ["č",5,[[[5,6.5],[0,7],[0,0],[5,0.5]],[[1.3,10],[2.5,8.7]],[[2.5,8.7],[3.7,10]]]],
     ["d",5,[[[5,0],[4.5,0.5],[4.5,10]],[[4.5,6.5],[0,7],[0,0],[4.5,0.5]]]],
+    ["đ",5.5,[[[5,0],[4.5,0.5],[4.5,10]],[[4.5,6.5],[0,7],[0,0],[4.5,0.5]],[[3.0,8.5],[5.5,8.5]]]],
     ["e",5,[[[5,1],[4,0],[0,0],[0,7],[4.6,7],[5,3.5]],[[5,3.5],[0.3,3.5]]]],
     ["é",5,[[[5,1],[4,0],[0,0],[0,7],[4.6,7],[5,3.5]],[[5,3.5],[0.3,3.5]],[[2.3,8.8],[3.8,10]]]],
     ["è",5,[[[5,1],[4,0],[0,0],[0,7],[4.6,7],[5,3.5]],[[5,3.5],[0.3,3.5]],[[2.6,8.8],[1.3,10]]]],
@@ -396,6 +413,7 @@ subdivision_font =
     ["r",4,[[[0,0],[0,7]],[[0,5],[2,7],[4,7]]]],
     ["s",5,[[[5,7],[0,7],[0,3.5],[5,3.5],[5,0],[0,0]]]],
     ["ś",5,[[[5,7],[0,7],[0,3.5],[5,3.5],[5,0],[0,0]],[[2.2,8.8],[3.7,10]]]],
+    ["š",5,[[[5,7],[0,7],[0,3.5],[5,3.5],[5,0],[0,0]],[[1.3,10],[2.5,8.7]],[[2.5,8.7],[3.7,10]]]],
     ["t",4.5,[[[0,7],[4,7]],[[2,10],[2,1],[3,0],[4.5,0]]]],
     ["u",5,[[[0,7],[0,0],[3.6,0],[5,1.6]],[[5,7],[5,0]]]],
     ["ú",5,[[[0,7],[0,0],[3.6,0],[5,1.6]],[[5,7],[5,0]],[[2.5,8.8],[4,10]]]],
@@ -410,6 +428,7 @@ subdivision_font =
     ["z",5,[[[0,7],[5,7]],[[5,7],[0,0]],[[0,0],[5,0]]]],
     ["ź",5,[[[0,7],[5,7]],[[5,7],[0,0]],[[0,0],[5,0]],[[2.5,8.8],[4,10]]]],
     ["ż",5,[[[0,7],[5,7]],[[5,7],[0,0]],[[0,0],[5,0]],[[2.5,9]]]],
+    ["ž",5,[[[0,7],[5,7]],[[5,7],[0,0]],[[0,0],[5,0]],[[1.3,10],[2.5,8.7]],[[2.5,8.7],[3.7,10]]]],
     ["A",8,[[[0,0],[4,10]],[[4,10],[8,0]],[[1.4,3.4],[6.6,3.4]]]],
     ["Ä",8,[[[0,0],[4,8.5]],[[4,8.5],[8,0]],[[1.6,3.4],[6.4,3.4]],[[2.5,10]],[[5.5,10]]]],
     ["À",8,[[[0,0],[4,7.5]],[[4,7.5],[8,0]],[[1.8,3.4],[6.2,3.4]],[[5.5,8.5],[4,10]]]],
@@ -420,7 +439,9 @@ subdivision_font =
     ["C",6,[[[6,0],[0,0],[0,10],[6,10]]]],
     ["Ć",6,[[[6,0],[0,0],[0,7],[6,7]],[[2.8,8.7],[4.2,10]]]],
     ["Ç",6,[[[6,2],[0,2],[0,10],[6,10]],[[4,2],[4.8,1.3],[4.8,0],[3,0]]]],
+    ["Č",6,[[[6,0],[0,0],[0,7],[6,7]],[[1.8,10],[3.0,8.7]],[[3.0,8.7],[4.2,10]]]],
     ["D",6,[[[0,0],[0,10]],[[0,10],[6,10],[6,0],[0,0]]]],
+    ["Đ",7,[[[1,0],[1,10]],[[1,10],[7,10],[7,0],[1,0]],[[0,5],[2.6,5]]]],
     ["E",6,[[[0,0],[0,10]],[[0,10],[6,10]],[[0,5],[5,5]],[[0,0],[6,0]]]],
     ["É",6,[[[0,0],[0,7]],[[0,7],[6,7]],[[0,3.5],[5,3.5]],[[0,0],[6,0]],[[3.7,8.7],[2.3,10]]]],
     ["È",6,[[[0,0],[0,7]],[[0,7],[6,7]],[[0,3.5],[5,3.5]],[[0,0],[6,0]],[[2.3,8.7],[3.7,10]]]],
@@ -449,6 +470,7 @@ subdivision_font =
     ["R",6,[[[0,0],[0,10]],[[0,10],[6,10],[6,5],[0,5]],[[0,5],[6,0]]]],
     ["S",7,[[[7,9],[6,10],[0,10],[0,5],[7,5],[7,0],[1,0],[0,1]]]],
     ["Ś",7,[[[7,6],[5.5,7],[0,7],[0,3.5],[7,3.5],[7,0],[1.5,0],[0,1]],[[3.3,8.7],[4.7,10]]]],
+    ["Š",7,[[[7,6],[5.5,7],[0,7],[0,3.5],[7,3.5],[7,0],[1.5,0],[0,1]],[[2.3,10],[3.5,8.7]],[[3.5,8.7],[4.7,10]]]],
     ["T",7,[[[0,10],[7,10]],[[3.5,10],[3.5,0]]]],
     ["U",7,[[[0,10],[0,1.5],[1.5,0],[5.5,0],[7,1.5]],[[7,0],[7,10]]]],
     ["Ü",7,[[[0,8.5],[0,1.5],[1.5,0],[5.5,0],[7,1.5]],[[7,0],[7,8.5]],[[2,10]],[[5,10]]]],
@@ -460,6 +482,7 @@ subdivision_font =
     ["Z",7,[[[0,10],[7,10]],[[7,10],[0,0]],[[0,0],[7,0]]]],
     ["Ź",7,[[[0,7],[7,7]],[[7,7],[0,0]],[[0,0],[7,0]],[[3.3,8.7],[4.7,10]]]],
     ["Ż",7,[[[0,8],[7,8]],[[7,8],[0,0]],[[0,0],[7,0]],[[3.5,10]]]],
+    ["Ž",7,[[[0,7],[7,7]],[[7,7],[0,0]],[[0,0],[7,0]],[[2.3,10],[3.5,8.7]],[[3.5,8.7],[4.7,10]]]],
     ["0",7,[[[3.5,0],[2,0.2],[0,3],[0,7],[2,10],[5,10],[7,7],[7,3],[5,0.2],[3.5,0]]]],
     ["1",2.5,[[[1.5,0],[1.5,10]],[[0.5,0],[2.5,0]],[[1.5,10],[0,8.5]]]],
     ["2",6,[[[0,8.7],[1.2,10],[6,10],[6,6],[3,3],[0,0]],[[0,0],[6,0]]]],
@@ -667,7 +690,7 @@ subdivision_font =
 // The default alphabet is the fallback.
 subdivision_stencil_font =
 [
-  ["Subdivision Stencil Font", "Stone Age Sculptor", "CC0 (Public Domain)"],
+  ["Subdivision Stencil Font", "Stone Age Sculptor", "CC0 (Public Domain)", 1],
   [
     ["a",5,[[[0.5,6.5],[2,7],[4.5,6],[4,0.5],[5,0]],[[2.22,4],[0,4.5],[0,0],[2.35,1]]]],
     ["b",5,[[[0,0],[0.5,0.5],[0.5,10]],[[2.5,6.5],[5,7],[5,0],[2.5,0.5]]]],
@@ -703,7 +726,7 @@ subdivision_stencil_font =
 // The default alphabet is the fallback.
 subdivision_classic_font =
 [
-  ["Subdivision Classic Font", "Stone Age Sculptor", "CC0 (Public Domain)"],
+  ["Subdivision Classic Font", "Stone Age Sculptor", "CC0 (Public Domain)", 1],
   [
     ["A",10,[[[0,0],[2,0]],[[1,0],[5,10]],[[5,10],[9,0]],[[2.4,3.4],[7.6,3.4]],[[8,0],[10,0]]]],
     ["B",7,[[[1,0],[1,10]],[[0,10],[6,10],[6,5],[1,5]],[[1,5],[7,5],[7,0],[0,0]]]],
@@ -770,7 +793,7 @@ subdivision_classic_font =
 // The shapes of the characters are not good enough yet.
 subdivision_handwriting_font =
 [
-  ["Subdivision Handwriting Font", "Stone Age Sculptor", "CC0 (Public Domain)"],
+  ["Subdivision Handwriting Font", "Stone Age Sculptor", "CC0 (Public Domain)", 1],
   [
     ["a",5,[[[0.5,6.5],[2,7],[4.5,6],[4,0.5],[5,0]],[[4.05,4],[0,4.5],[0,0],[4.2,1],[6,3]]]],
     ["b",5,[[[0,3],[4,7],[4,10],[0,10],[0,0],[5,0],[4,4]],[[4,4],[6,3]]]],
@@ -794,11 +817,14 @@ font_list =
 // ------------
 //
 // A module to help designing the font.
-module FontDesigner(font="Subdivision Font",weight=1,slant=0,method="1path",smooth=2,fontdefinition)
+module FontDesigner(font="Subdivision Font",weight=1,slant=0,method="1",smooth=2,fontdefinition)
 {
   // Check if the user has a own font definition.
   // If so, add it to the end of the internal list of fonts.
   _fontlist = is_undef(fontdefinition) ? font_list : concat(font_list,fontdefinition);
+  
+  // Convert the method to a method for a path
+  _method      = MethodSplitName(method)[1];
 
   // Find the font of the name.
   // To do: make assert() when font name is not found.
@@ -881,7 +907,7 @@ module FontDesigner(font="Subdivision Font",weight=1,slant=0,method="1path",smoo
                     translate(font_definition[i][2][j][k])
                       circle(0.3);
 
-              path = Subdivision(font_definition[i][2][j],smooth,method=method);
+              path = Subdivision(font_definition[i][2][j],smooth,method=_method);
 
               color("Blue",0.25)
               {

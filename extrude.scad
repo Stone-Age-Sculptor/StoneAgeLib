@@ -31,14 +31,29 @@
 // Changes:
 //   Added a default convexity of 3 for all functions.
 //
+// Version 6
+// January 2, 2026
+// Changes:
+//   The fake_roof() had its own version.
+//   That is removed, it is now part of the version of this file.
+//   fake_roof Version 1, January 31, 2025
 //
+// Version 7
+// January 26, 2026
+// Changes:
+//   Function ExtrudeRoundedEdge() and ExtrudeFilletEdge() added.
 //
-// This version number is the overall version for everything in this file.
-// Some modules and functions in this file may have their own version.
+// Version 8
+// April 20, 2026
+// Changes:
+//   Changed the text of the warning message.
+//   The chamfer_extrude() function has now the parameter 'center'.
+//
+
 
 if(version()[0] < 2024)
 {
-  echo("Warning: The roof() function is not available.");
+  echo("🟡 Warning: The roof() function is not available.");
 }
 
 
@@ -132,10 +147,6 @@ module roof_router(convexity)
 //
 // fake_roof
 // ---------
-// Version 1
-// January 31, 2025
-// By: Stone Age Sculptor
-// License: CC0 (Public Domain)
 //
 // Warning: It does not work well yet.
 //
@@ -190,7 +201,8 @@ module fake_roof(convexity)
 //   angle           : angle for top and bottom chamfer 1...89
 //   angle_top       : top angle, overrides 'angle'
 //   angle_bottom    : bottom angle, overrides 'angle'
-module chamfer_extrude(height=1,chamfer,chamfer_top,chamfer_bottom,angle,angle_top,angle_bottom,convexity=3)
+//
+module chamfer_extrude(height=1,chamfer,chamfer_top,chamfer_bottom,angle,angle_top,angle_bottom,center=false,convexity=3)
 {
   bothchamf   = is_undef(chamfer)        ? 0 : chamfer;
   topchamf    = is_undef(chamfer_top)    ? bothchamf : chamfer_top;
@@ -206,53 +218,62 @@ module chamfer_extrude(height=1,chamfer,chamfer_top,chamfer_bottom,angle,angle_t
   topscale    = tan(topang);
   bottomscale = tan(bottomang);
 
-  intersection()
+  // The extrusion with optional chamfer is designed
+  // from the xy-plane and up.
+  // It can be centered afterwards.
+  z_offset    = center ? -height/2 : 0;
+  
+  translate([0,0,z_offset])
   {
-    union()
+    intersection()
     {
-      // The bottom chamfer.
-      // Since the roof() function is only upward,
-      // a mirror() is used.
-      // It is raised a tiny amount to be sure
-      // that it connects to the middle part.
-      if(bottomchamf > 0)
-        color("#4DB58D")
-          translate([0,0,bottomchamf+0.001])
-            mirror([0,0,1])
-              scale([1,1,bottomscale])
+      union()
+      {
+        // The bottom chamfer.
+        // Since the roof() function is only upward,
+        // a mirror() is used.
+        // It is raised a tiny amount to be sure
+        // that it connects to the middle part.
+        if(bottomchamf > 0)
+          color("#4DB58D")
+            translate([0,0,bottomchamf+0.001])
+              mirror([0,0,1])
+                scale([1,1,bottomscale])
+                  roof_router(convexity=3)
+                    children();
+
+        // The middle part.
+        color("#26E49C")
+          translate([0,0,bottomchamf])
+            linear_extrude(height-bottomchamf-topchamf,convexity=convexity)
+              children();
+
+        // The top chamfer.
+        // It is lowered a tiny amount to be sure
+        // that it connects to the middle part.
+        if(topchamf > 0)
+          color("#4CA986")
+            translate([0,0,height-topchamf-0.001])
+              scale([1,1,topscale])
                 roof_router(convexity=3)
                   children();
+      }
 
-      // The middle part.
-      color("#26E49C")
-        translate([0,0,bottomchamf])
-          linear_extrude(height-bottomchamf-topchamf,convexity=convexity)
-            children();
-
-      // The top chamfer.
-      // It is lowered a tiny amount to be sure
-      // that it connects to the middle part.
-      if(topchamf > 0)
-        color("#4CA986")
-          translate([0,0,height-topchamf-0.001])
-            scale([1,1,topscale])
-              roof_router(convexity=3)
-                children();
-    }
-
-    // To make it look better in the preview,
-    // the box for the intersection is made bigger for
-    // x and y and is made bigger for z when there is
-    // no chamfer on that surface.
-    zlower = bottomchamf == 0 ? 1 : 0;
-    zupper = topchamf    == 0 ? height + zlower + 1 : height + zlower;
-    color("#A4D3C1")
-      translate([0,0,-zlower])
-        linear_extrude(height=zupper,convexity=convexity)
-          offset(2)        // 1.0001 or 2 or any value above 1.
-            children();
-  }  
+      // To make it look better in the preview,
+      // the box for the intersection is made bigger for
+      // x and y and is made bigger for z when there is
+      // no chamfer on that surface.
+      zlower = bottomchamf == 0 ? 1 : 0;
+      zupper = topchamf    == 0 ? height + zlower + 1 : height + zlower;
+      color("#A4D3C1")
+        translate([0,0,-zlower])
+          linear_extrude(height=zupper,convexity=convexity)
+            offset(2)        // 1.0001 or 2 or any value above 1.
+              children();
+    }  
+  }
 }
+
 
 // ==============================================================
 //
@@ -409,6 +430,121 @@ module Loop2D()
   for(xs=[-1,1])
     translate([xs*(width+1),-leg_length/2+0.001])
       square([width,leg_length],center=true);
+}
+
+// ==============================================================
+//
+// ExtrudeRoundedEdge
+// ------------------
+// A 2D shape is extruded, up to thickness,
+// and the edge is the top half of a circle.
+//
+// Parameters:
+//   height:
+//     The height/thickness of the extrusion.
+//     It is also used for the radius
+//     of the round edge.
+//   method:
+//     The method is for the roof() function.
+//     At this moment (januari 2026), there are two options,
+//     "straight" and "voronoi" and "voronoi"
+//     is the default.
+// Note:
+//   The rounding has a fixed number of 10 steps.
+//
+module ExtrudeRoundedEdge(height=1,method="voronoi")
+{
+  amplify = height;
+
+  intersection()
+  {
+    linear_extrude(height,convexity=3)
+      children();
+
+    // Multiple roof() with scaling of the roof()
+    // and offset() are used create a rounded edge.
+    // It is a simple fixed 10-step rounding.
+    // The numbers are found by trial and error.
+    // It is originally designed for a circle 
+    // with radius of 1, and a height of 1.
+    //
+    // The offset is 0.02, 0.04, 0.08, 0.16 and so on,
+    // up to 10.24. The "0.02*pow(2,i)" is used for it.
+
+    data = [ 5.06,    3.464,    2.436, 
+             1.7011,  1.1690,   0.7723, 
+             0.48796, 0.292696, 0.165632,
+             0.08937];
+
+    for(i=[0:len(data)-1])
+      scale([1,1,data[i]])
+        roof(method=method,convexity=3)
+          offset(amplify*0.02*pow(2,i))
+            children();
+  }
+}
+
+
+// ==============================================================
+//
+// ExtrudeFilletEdge
+// ------------------
+// A 2D shape is extruded, up to thickness,
+// and the bottom edge gets an outside fillet.
+//
+// Parameters:
+//   height:
+//     The height/thickness of the extrusion.
+//     It is also used for the radius
+//     of the bottom fillet.
+//   method:
+//     The method is for the roof() function.
+//     At this moment (januari 2026), there are two options,
+//     "straight" and "voronoi" and "voronoi"
+//     is the default.
+// Note:
+//   The rounding has a fixed number of 10 steps.
+//
+module ExtrudeFilletEdge(height=1,method="voronoi")
+{
+  amplify = height;
+
+  intersection()
+  {
+    linear_extrude(height,convexity=3)
+      offset(height)
+        children();
+        
+    // Multiple roof() with scaling of the roof()
+    // and offset() are used create a rounded fillet.
+    // It is a simple fixed 10-step rounding.
+    // The numbers are found by trial and error.
+    // It is originally designed for a circle 
+    // with radius of 1, and a height of 1.
+
+    data = 
+    [ 
+      [1.0, 0.04],
+      [0.9, 0.23],
+      [0.8, 0.44],
+      [0.7, 0.68],
+      [0.6, 0.97],
+      [0.5, 1.35],
+      [0.4, 1.89],
+      [0.3, 2.77],
+      [0.1, 9.62],
+      [0.04, 25.1],
+    ];
+
+    union()
+    {
+      for(i=[0:len(data)-1])
+        scale([1,1,data[i][1]])
+          roof(method=method,convexity=3)
+            offset(amplify*data[i][0])
+              children();
+    }
+  }
 }
 
 // ==============================================================

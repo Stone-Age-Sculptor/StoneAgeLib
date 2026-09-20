@@ -27,9 +27,7 @@
 // Changes:
 //   Renamed "stamp" into "_turtle_stamp".
 //
-//
-// This version number is the overall version for everything in this file.
-// Some modules and functions in this file may have their own version.
+
 
 // I prefer how the Python Turtle graphics is used.
 // I created this script from scratch, without looking at implementations by others.

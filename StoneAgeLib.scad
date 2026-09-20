@@ -80,23 +80,39 @@
 //   - The method "weighted" in subdivision.scad is
 //     now called "cubic".
 //
+// Version 10
+// Date: September 20, 2026
+// Changes:
+//   New subdivision method "fit", where the control points
+//   fit on the smooth curve. Only for 2D at the moment.
+//   The functions in the files have no longer their own version.
+//   Function ExtrudeRoundedEdge() and ExtrudeFilletEdge() added in extrude.scad.
+//   File "color.scad" renamed to "colors.scad", to avoid the
+//   same name as a file of the BOSL2 library.
+//     At this moment the "Subdivision Font" can not be used
+//     together with the BOSL2 library. More changes are needed.
+//   Added RoundedCube() in shapes.scad.
+//   The function _MatrixOffsetPoints() is renamed to MatrixNormalOffset().
+//
+//
+//
 //
 // This version number is the overall version for the whole library.
-// Each file has its own version and sometimes there are
-// modules and function inside a file with their own version.
-
+// Each file has its own version.
+//
+//
 // To use this library, either include this file (StoneAgeLib.scad) or 
 // include the file or files that are used.
 // If you make a project with this library, then please add a copy 
 // of this library to your project or copy the used functions into your
 // own script. The modules and functions of this library may change.
 
-// This library uses a OpenSCAD version of at least 2025.
+// This library uses a OpenSCAD version of at least 2026.
 
 // The overall version of the library.
-VERSION_STONEAGELIB = 9;
+VERSION_STONEAGELIB = 10;
 
-include <color.scad>
+include <colors.scad>
 include <extrude.scad>
 include <font.scad>
 include <inverseminkowski.scad>

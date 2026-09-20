@@ -12,20 +12,24 @@
 //
 // Version 2.01
 // September 27, 2024
-// With improvements by Reddit user ImpatientProf.
-// https://www.reddit.com/r/openscad/comments/1fqa33m/i_spent_a_few_days_in_tangent_lines/
-// The improvements by ImpatientProf were incorporated 
-// in this script by me (Stone Age Sculptor).
-// Version 2.01 has a few fixes in the comments,
-// after publishing Version 2.
+// Changes:
+//   With improvements by Reddit user ImpatientProf.
+//   https://www.reddit.com/r/openscad/comments/1fqa33m/i_spent_a_few_days_in_tangent_lines/
+//   The improvements by ImpatientProf were incorporated 
+//   in this script by me (Stone Age Sculptor).
+//   Version 2.01 has a few fixes in the comments,
+//   after publishing Version 2.
 //
 // Version 3
 // October 6, 2024
-// Added two functions:
-//   IntersectionPoints()
-//     The two coordinates of overlapping circles.
-//   TouchPoint()
-//     The point where circles touch.
+// Changes:
+//   Added two functions:
+//     IntersectionPoints()
+//       The two coordinates of overlapping circles.
+//     TouchPoint()
+//       The point where circles touch.
+//
+//
 
 
 // PointForInternal
@@ -211,3 +215,4 @@ module DrawLine(Point1,Point2,line_width=0.5)
       translate(pos)
         circle(d = line_width);
 }
+

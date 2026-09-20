@@ -13,8 +13,17 @@
 // Changes:
 //   Added substr() function.
 //
-// This version number is the overall version for everything in this file.
-// Some modules and functions in this file may have their own version.
+// Version 3
+// January 2, 2026
+// Changes:
+//   The string_to_numbers had its own version.
+//   That is removed, it is now part of the version of this file.
+//     string_to_numbers Version 1, October 29, 2023
+//       Initial version.
+//     string_to_numbers Version 2, November 1, 2023
+//       Code simplified.
+//       Fixed bug when first character was not a number.
+//
 
 
 // ==============================================================
@@ -24,17 +33,6 @@
 //
 // Convert a string with numbers (as text)
 // to a OpenSCAD list of numbers.
-// This is part of my OpenSCAD file: Elements.scad
-// I might use it in other OpenSCAD files,
-// so it has its own version number.
-//
-// By Stone Age Sculptor
-// Version 1, October 29, 2023, License CC0
-//   Initial version.
-// Version 2, November 1, 2023, License CC0
-//   Code simplified.
-//   Fixed bug when first character
-//   was not a number.
 //
 // To do: Accept negative numbers and floating point numbers.
 

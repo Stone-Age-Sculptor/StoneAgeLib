@@ -26,8 +26,28 @@
 // Changes:
 //   SteelPlate() added for a checkered steel plate texture.
 //
-// This version number is the overall version for everything in this file.
-// Some modules and functions in this file may have their own version.
+// Version 5
+// January 2, 2026
+// Changes:
+//   The FlexHex function had its own version history.
+//   That is removed, it is not part of the version of this file.
+//   FlexHex Version 2, January 22, 2023
+//     I call them "FlexHex Stones".
+//     I removed the flat base, only the FlexHex stones are created.
+//     That makes it also possible to put a fabric halfway.
+//     The height is now the height of the stones.
+//     The bottom starts at z position 0.
+//     The seed for the random is added as a parameter.
+//     All irregular stones are first created in 2D.
+//     The extrusion is done at the end.
+//     Add your own bottom to connect all the stones.
+//     I found this more useful when using it in a scene.
+//   FlexHex Version 3, January 19, 2025
+//     The default seed is now a random.
+//     The size is now default 100x100
+//     Added a FlexHex2D() with the same parameters.
+//
+//
 
 include <list.scad>
 
@@ -251,28 +271,7 @@ module SteelPlate(xn=10,yn=10,spacing=1)
 // Uploaded June 09, 2022
 // License CC0 Public Domain
 //
-// Version 2
-// January 22, 2023
-// License: CC0 (Public Domain)
-// Changes by: Stone Age Sculptor:
-//   I call them "FlexHex Stones".
-//   I removed the flat base, only the FlexHex stones are created.
-//   That makes it also possible to put a fabric halfway.
-//   The height is now the height of the stones.
-//   The bottom starts at z position 0.
-//   The seed for the random is added as a parameter.
-//   All irregular stones are first created in 2D.
-//   The extrusion is done at the end.
-//   Add your own bottom to connect all the stones.
-//   I found this more useful when using it in a scene.
-//
-// Version 3
-// January 19, 2025
-// License CC0 (Public Domain)
-// Changes by: Stone Age Sculptor:
-//   The default seed is now a random.
-//   The size is now default 100x100
-//   Added a FlexHex2D() with the same parameters.
+// Changes by: Stone Age Sculptor. See header of this file.
 //
 //
 // FlexHex
